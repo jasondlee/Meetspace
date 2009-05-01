@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <head>
+        <title><ui:insert name="title">meetspace</ui:insert></title>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/reset-fonts-grids/reset-fonts-grids.css"/>
+        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/style.css" />
+        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/okcjug.css" />
+    </head>
+
+    <body>
+        <div id="doc4" style="border: 1px solid black;">
+            <div id="hd" style="border-bottom: 1px solid black; padding: 5px;">
+                <div style="float:right;">
+                    <a style="text-decoration: none;" href="#{facesContext.externalContext.request.contextPath}/index.html">Home</a>
+                </div>
+                <h:graphicImage url="/images/okcJugLogo1.gif" style="border: 0px"/>
+            </div>
+            <div id="bd" style="margin: 5px;">
+                Above the grid!
+                <div id="yui-main">
+                    <div class="yui-b">
+                        <div class="yui-gc"> <!-- the "special grid" -->
+                            <div class="yui-u first">
+                                <h:messages />
+                                <ui:insert name="content">
+                                    Something's wrong!
+                                </ui:insert>
+                            </div>
+                            <div class="yui-u">
+                                <h:dataTable var="entry" value="#{blogService.mostRecent}">
+                                    <h:column>
+                                        <h3>#{entry.title}</h3>
+                                        <span style="font-size: small; font-style: italic">Posted by #{entry.postedBy.firstName} #{entry.postedBy.lastName}</span>
+                                    </h:column>
+                                </h:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ft">
+
+            </div>
+        </div>
+
+    </body>
+</html>

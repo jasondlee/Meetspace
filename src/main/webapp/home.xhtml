@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<head>
+    <title>Should Not Be Displayed</title>
+</head>
+<body>   <!-- template="/WEB-INF/demotemplate.xhtml" -->
+<ui:composition template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
+    <ui:define name="title">Oklahoma City Java Users Group</ui:define>
+    <ui:define name="content">
+        Welcome to the online home of the Oklahoma City Java Users Group, Inc.
+        <br />
+        The next meeting is:
+        <table border="0">
+            <tr>
+                <td>Name:</td>
+                <td>
+                    #{meeting.nextMeeting.name} (Register <a href="#{facesContext.externalContext.request.contextPath}/register.jsf?meetingId=#{meeting.nextMeeting.id}">here</a>)
+                </td>
+            </tr>
+            <tr>
+                <td>Date:</td>
+                <td>
+                    <h:outputText value="#{meeting.nextMeeting.startDate}">
+                        <f:convertDateTime type="date" dateStyle="medium"/>
+                    </h:outputText>
+                </td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td>#{meeting.nextMeeting.description}</td>
+            </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</body>
+</html>
