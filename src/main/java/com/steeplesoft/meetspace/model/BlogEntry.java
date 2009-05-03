@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.ForeignKey;
 
 /**
  *
@@ -35,6 +36,7 @@ public class BlogEntry implements Serializable {
     @Column(nullable=false)
     private String body;
     @ManyToOne
+    @ForeignKey(name="fk_blog_member")
     private Member postedBy;
     @Column
     @Temporal(TemporalType.TIMESTAMP)

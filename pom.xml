@@ -6,6 +6,7 @@
     <artifactId>meetspace</artifactId>
     <packaging>war</packaging>
     <version>0.1-SNAPSHOT</version>
+    <name>Meet Space</name>
 
     <repositories>
         <repository>
@@ -30,6 +31,7 @@
         <facestester.version>0.2-SNAPSHOT</facestester.version>
         <jsf.version>2.0.0-b09</jsf.version>
         <seam.version>2.1.1.GA</seam.version>
+        <annotations.version>3.4.0.GA</annotations.version>
 
         <debug>true</debug>
         <compile.optimize>false</compile.optimize>
@@ -37,6 +39,39 @@
         <source.version>1.5</source.version>
         <compile.target>1.5</compile.target>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>${jsf.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-impl</artifactId>
+            <version>${jsf.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>jboss-seam</artifactId>
+            <version>${seam.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <version>${annotations.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <pluginManagement>
@@ -86,12 +121,10 @@
                         </component>
                     </components>
                     <componentProperties>
-                        <drop>true</drop>
-                        <!--configurationfile>src/main/resources/META-INF/persistence.xml</configurationfile-->
                         <persistenceunit>em</persistenceunit>
                         <outputfilename>schema.ddl</outputfilename>
+                        <drop>true</drop>
                         <format>true</format>
-                        <ejb3>true</ejb3>
                         <export>false</export>
                     </componentProperties>
                 </configuration>
@@ -176,32 +209,4 @@
             -->
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>${jsf.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>${jsf.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.seam</groupId>
-            <artifactId>jboss-seam</artifactId>
-            <version>${seam.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-    <name>Meet Space</name>
 </project>

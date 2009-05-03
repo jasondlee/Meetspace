@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.ForeignKey;
 
 /**
  *
@@ -25,8 +26,10 @@ public class Registration implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
+    @ForeignKey(name="fk_registration_meeting")
     private Meeting meeting;
     @ManyToOne(optional=true)
+    @ForeignKey(name="fk_registration_member")
     private Member member;
     private String emailAddress;
     private String fullName;
