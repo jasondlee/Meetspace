@@ -13,12 +13,13 @@
     <ui:define name="content">
         Welcome to the online home of the Oklahoma City Java Users Group, Inc.
         <br />
+        <br/>
         The next meeting is:
         <table border="0">
             <tr>
                 <td>Name:</td>
                 <td>
-                    #{meeting.nextMeeting.name} (Register <a href="#{facesContext.externalContext.request.contextPath}/register.jsf?meetingId=#{meeting.nextMeeting.id}">here</a>)
+                    #{meeting.nextMeeting.name} (Register <a href="#{request.contextPath}/register.jsf?meetingId=#{meeting.nextMeeting.id}">here</a>)
                 </td>
             </tr>
             <tr>

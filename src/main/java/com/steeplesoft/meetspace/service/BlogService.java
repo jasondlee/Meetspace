@@ -7,7 +7,6 @@ package com.steeplesoft.meetspace.service;
 
 import com.steeplesoft.meetspace.model.BlogEntry;
 import java.util.List;
-
 /**
  *
  * @author jasonlee

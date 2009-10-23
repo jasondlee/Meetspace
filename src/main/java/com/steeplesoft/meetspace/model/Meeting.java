@@ -2,20 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.steeplesoft.meetspace.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,34 +23,56 @@ import javax.persistence.TemporalType;
  * @author jasonlee
  */
 @Entity
-@Table(name="meeting")
+@Table(name = "meeting")
 @NamedQueries({
-    @NamedQuery(name="getMeeting", query="SELECT m FROM Meeting m WHERE id = :meetingId"),
-    @NamedQuery(name="nextMeeting", query="SELECT m FROM Meeting m WHERE startDate >= CURRENT_DATE")
-})
-@TableGenerator(table="pk_gen", name="TABLE_GEN")
+    @NamedQuery(name="getMeeting", query="SELECT m FROM Meeting m WHERE m.id = :meetingId"),
+    @NamedQuery(name="nextMeeting", query="SELECT m FROM Meeting m WHERE m.startDate >= CURRENT_DATE"),
+    @NamedQuery(name = "Meeting.findAll", query = "SELECT m FROM Meeting m"),
+    @NamedQuery(name = "Meeting.findById", query = "SELECT m FROM Meeting m WHERE m.id = :id"),
+    @NamedQuery(name = "Meeting.findByDescription", query = "SELECT m FROM Meeting m WHERE m.description = :description"),
+    @NamedQuery(name = "Meeting.findByEndDate", query = "SELECT m FROM Meeting m WHERE m.endDate = :endDate"),
+    @NamedQuery(name = "Meeting.findByEndTime", query = "SELECT m FROM Meeting m WHERE m.endTime = :endTime"),
+    @NamedQuery(name = "Meeting.findByName", query = "SELECT m FROM Meeting m WHERE m.name = :name"),
+    @NamedQuery(name = "Meeting.findByStartDate", query = "SELECT m FROM Meeting m WHERE m.startDate = :startDate"),
+    @NamedQuery(name = "Meeting.findByStartTime", query = "SELECT m FROM Meeting m WHERE m.startTime = :startTime")})
 public class Meeting implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE, generator="TABLE_GEN")
-    private Long id;
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    @Basic(optional = false)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+    @Column(name = "description", length = 255)
+    private String description;
+    @Column(name = "endDate")
     @Temporal(TemporalType.DATE)
     private Date endDate;
-    @Temporal(TemporalType.TIME)
-    private Date startTime;
+    @Column(name = "endTime")
     @Temporal(TemporalType.TIME)
     private Date endTime;
-    @Column
+    @Column(name = "name", length = 255)
     private String name;
-    @Column 
-    private String description;
+    @Column(name = "startDate")
+    @Temporal(TemporalType.DATE)
+    private Date startDate;
+    @Column(name = "startTime")
+    @Temporal(TemporalType.TIME)
+    private Date startTime;
+    @OneToMany(mappedBy = "meeting")
+    private Collection<Registration> registrationCollection;
 
-    public Long getId() {
+    public Meeting() {
+    }
+
+    public Meeting(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -71,6 +92,14 @@ public class Meeting implements Serializable {
         this.endDate = endDate;
     }
 
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
     public String getName() {
         return name;
     }
@@ -87,14 +116,6 @@ public class Meeting implements Serializable {
         this.startDate = startDate;
     }
 
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
@@ -102,7 +123,15 @@ public class Meeting implements Serializable {
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
-    
+
+    public Collection<Registration> getRegistrationCollection() {
+        return registrationCollection;
+    }
+
+    public void setRegistrationCollection(Collection<Registration> registrationCollection) {
+        this.registrationCollection = registrationCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -113,7 +142,7 @@ public class Meeting implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Member)) {
+        if (!(object instanceof Meeting)) {
             return false;
         }
         Meeting other = (Meeting) object;
@@ -125,6 +154,6 @@ public class Meeting implements Serializable {
 
     @Override
     public String toString() {
-        return "com.steeplesoft.oxlos.model.Meeting[id=" + id + "]";
+        return "com.steeplesoft.meetspace.model.Meeting[id=" + id + "]";
     }
 }

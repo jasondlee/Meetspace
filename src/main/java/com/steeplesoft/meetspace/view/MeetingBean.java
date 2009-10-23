@@ -7,16 +7,20 @@ package com.steeplesoft.meetspace.view;
 
 import com.steeplesoft.meetspace.model.Meeting;
 import com.steeplesoft.meetspace.service.MeetingService;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author jasonlee
  */
-@ManagedBean(name="meeting")
+@Named("meeting")
 @RequestScoped
 public class MeetingBean {
+//    @ManagedProperty("#{meetingService}")
+//    @EJB(mappedName="ejb/meetingService")
+    @Inject
     MeetingService meetingService;
     Meeting nextMeeting = null;
 
@@ -26,5 +30,13 @@ public class MeetingBean {
         }
 
         return nextMeeting;
+    }
+
+    public MeetingService getMeetingService() {
+        return meetingService;
+    }
+
+    public void setMeetingService(MeetingService meetingService) {
+        this.meetingService = meetingService;
     }
 }

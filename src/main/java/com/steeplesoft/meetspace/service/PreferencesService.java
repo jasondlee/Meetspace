@@ -14,5 +14,5 @@ import java.util.Map;
  */
 public interface PreferencesService {
     public Map<String, Preference> getPreferences();
-    public void savePreferences();
+    public void savePreferences(Map<String, Preference> pref);
 }

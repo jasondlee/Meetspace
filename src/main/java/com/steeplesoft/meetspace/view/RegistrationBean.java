@@ -9,18 +9,21 @@ import com.steeplesoft.meetspace.model.Meeting;
 import com.steeplesoft.meetspace.model.Registration;
 import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.MeetingService;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.ManagedProperty;
-import javax.faces.model.RequestScoped;
+import javax.inject.Named;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.inject.Inject;
 
 /**
  *
  * @author jasonlee
  */
-@ManagedBean(name="regBean")
+@Named("regBean")
 @RequestScoped
 public class RegistrationBean {
+    @Inject
     private MeetingService meetingService;
+    @Inject
     private MainService mainService;
 
     @ManagedProperty(value="#{param.meetingId}")

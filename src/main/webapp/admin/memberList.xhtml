@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+      template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
+    <ui:define name="content">
+        <h:form id="memberListForm">
+            <h:outputLink value="#{request.contextPath}/admin/member.jsf">Add</h:outputLink>
+            <h:commandLink id="prevLink" action="#{memberBean.previous}" value="Previous #{memberBean.paginator.pageSize}" rendered="#{memberBean.paginator.hasPreviousPage}"
+                           onclick="jsf.ajax.request(this, event, {execute: 'memberListForm:prevLink', render: 'memberListForm'}); return false;">
+            </h:commandLink>&nbsp;
+            <h:commandLink id="nextLink" action="#{memberBean.next}" value="Next #{memberBean.paginator.pageSize}" rendered="#{memberBean.paginator.hasNextPage}"
+                           onclick="jsf.ajax.request(this, event, {execute: 'memberListForm:nextLink', render: 'memberListForm'}); return false;">
+            </h:commandLink>&nbsp;
+            <h:dataTable id="memberTable" value="#{memberBean.members}" var="member" style="border-collapse1: collapse;" border="1" width="100%">
+                <h:column>
+                    <f:facet name="header"><h:outputText style="font-weight: bold;" value="Last Name"/></f:facet>
+                    #{member.lastName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText style="font-weight: bold;" value="First Name"/></f:facet>
+                    #{member.firstName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText style="font-weight: bold;" value="Email Addresss"/></f:facet>
+                    #{member.emailAddress}
+                </h:column>
+                <h:column>
+                    <h:outputLink value="#{request.contextPath}/admin/member.jsf">
+                        <f:param name="id" value="#{member.id}"/>
+                        Edit
+                    </h:outputLink>
+                </h:column>
+            </h:dataTable>
+            <h:outputText value="#{memberBean.paginator.pageFirstItem + 1} to #{memberBean.paginator.pageLastItem + 1} of #{memberBean.paginator.itemsCount}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -24,6 +24,15 @@ public class Preference implements Serializable {
     @Column
     private String value;
 
+    public Preference() {
+
+    }
+
+    public Preference(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public String getName() {
         return name;
     }
@@ -62,6 +71,6 @@ public class Preference implements Serializable {
 
     @Override
     public String toString() {
-        return "com.steeplesoft.oxlos.model.Preference[id=" + name + "]";
+        return "com.steeplesoft.meetspace.model.Preference[id=" + name + "]";
     }
 }

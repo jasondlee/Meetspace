@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.ForeignKey;
 
 /**
  *
@@ -25,7 +24,7 @@ import org.hibernate.annotations.ForeignKey;
  */
 @Entity
 @Table(name="blog_entry")
-@TableGenerator(table="pk_gen", name="TABLE_GEN")
+@TableGenerator(table="pk_gen", name="BLOG_GEN")
 public class BlogEntry implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,8 +35,7 @@ public class BlogEntry implements Serializable {
     @Column(nullable=false)
     private String body;
     @ManyToOne
-    @ForeignKey(name="fk_blog_member")
-    private Member postedBy;
+    private GroupMember postedBy;
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date postedDate;
@@ -69,11 +67,11 @@ public class BlogEntry implements Serializable {
         this.modifiedDate = modifiedDate;
     }
 
-    public Member getPostedBy() {
+    public GroupMember getPostedBy() {
         return postedBy;
     }
 
-    public void setPostedBy(Member postedBy) {
+    public void setPostedBy(GroupMember postedBy) {
         this.postedBy = postedBy;
     }
 
@@ -115,7 +113,7 @@ public class BlogEntry implements Serializable {
 
     @Override
     public String toString() {
-        return "com.steeplesoft.oxlos.model.BlogEntry[id=" + id + "]";
+        return "com.steeplesoft.meetspace.model.BlogEntry[id=" + id + "]";
     }
 
 }

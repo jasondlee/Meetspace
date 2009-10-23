@@ -5,13 +5,9 @@
 
 package com.steeplesoft.meetspace.service;
 
-import com.steeplesoft.meetspace.model.Meeting;
-
 /**
  *
  * @author jasonlee
  */
-public interface MeetingService {
-    public Meeting getUpcomingMeeting();
-    public Meeting getMeeting(Long meetingId);
+public interface MemberService  {
 }
