@@ -2,11 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.steeplesoft.meetspace.service.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -14,6 +16,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -22,19 +26,55 @@ import javax.persistence.criteria.Root;
 @Named("test")
 @SessionScoped
 public class DataAccessController implements Serializable {
+
     @PersistenceContext(name = "em")
     protected EntityManager em;
+    @Resource
+    private UserTransaction utx;
 
     public <T> void create(T entity) {
-        em.persist(entity);
+        try {
+            utx.begin();
+            em.persist(entity);
+            utx.commit();
+        } catch (Exception e) {
+            try {
+                utx.rollback();
+            } catch (SystemException ex) {
+                //
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> void edit(T entity) {
-        em.merge(entity);
+        try {
+            utx.begin();
+            em.merge(entity);
+            utx.commit();
+        } catch (Exception e) {
+            try {
+                utx.rollback();
+            } catch (SystemException ex) {
+                //
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> void remove(T entity) {
-        em.remove(em.merge(entity));
+        try {
+            utx.begin();
+            em.remove(em.merge(entity));
+            utx.commit();
+        } catch (Exception e) {
+            try {
+                utx.rollback();
+            } catch (SystemException ex) {
+                //
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> T find(Class<T> clazz, Object id) {
@@ -67,5 +107,4 @@ public class DataAccessController implements Serializable {
         Query q = em.createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-
 }

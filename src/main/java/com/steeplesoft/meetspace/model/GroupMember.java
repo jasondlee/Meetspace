@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.steeplesoft.meetspace.model;
 
 import java.io.Serializable;
@@ -10,6 +9,8 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,12 +23,19 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "group_member")
-@NamedQueries({@NamedQuery(name = "GroupMember.findAll", query = "SELECT g FROM GroupMember g"), @NamedQuery(name = "GroupMember.findById", query = "SELECT g FROM GroupMember g WHERE g.id = :id"), @NamedQuery(name = "GroupMember.findByEmailAddress", query = "SELECT g FROM GroupMember g WHERE g.emailAddress = :emailAddress"), @NamedQuery(name = "GroupMember.findByFirstName", query = "SELECT g FROM GroupMember g WHERE g.firstName = :firstName"), @NamedQuery(name = "GroupMember.findByLastName", query = "SELECT g FROM GroupMember g WHERE g.lastName = :lastName")})
+@NamedQueries({
+    @NamedQuery(name = "GroupMember.findAll", query = "SELECT g FROM GroupMember g"),
+    @NamedQuery(name = "GroupMember.findById", query = "SELECT g FROM GroupMember g WHERE g.id = :id"),
+    @NamedQuery(name = "GroupMember.findByEmailAddress", query = "SELECT g FROM GroupMember g WHERE g.emailAddress = :emailAddress"),
+    @NamedQuery(name = "GroupMember.findByFirstName", query = "SELECT g FROM GroupMember g WHERE g.firstName = :firstName"),
+    @NamedQuery(name = "GroupMember.findByLastName", query = "SELECT g FROM GroupMember g WHERE g.lastName = :lastName")})
 public class GroupMember implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @Column(name = "emailAddress", length = 255)
     private String emailAddress;
@@ -109,5 +117,4 @@ public class GroupMember implements Serializable {
     public String toString() {
         return "com.steeplesoft.meetspace.model.GroupMember[id=" + id + "]";
     }
-
 }
