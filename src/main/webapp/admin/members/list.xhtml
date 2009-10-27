@@ -7,7 +7,7 @@
     <ui:define name="content">
         <h:form id="memberListForm">
             <h:commandLink action="#{memberBean.add}" value="Add"/>
-            <h:dataTable id="memberTable" value="#{memberBean.members}" var="member" style="border-collapse1: collapse;" border="1" width="100%">
+            <h:dataTable id="memberTable" value="#{memberBean.members}" var="member" style="border-collapse: collapse;" border="1" width="100%">
                 <h:column>
                     <f:facet name="header"><h:outputText style="font-weight: bold;" value="Last Name"/></f:facet>
                     #{member.lastName}
