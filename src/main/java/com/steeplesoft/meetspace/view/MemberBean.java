@@ -35,6 +35,16 @@ public class MemberBean implements Serializable {
     private DataModel dataModel;
     private int rowsPerPage = 5;
     private GroupMember current;
+
+    public int getRowsPerPage() {
+        return rowsPerPage;
+    }
+
+    public void setRowsPerPage(int rowsPerPage) {
+        this.rowsPerPage = rowsPerPage;
+        resetList();
+        resetPagination(null);
+    }
     private int selectedItemIndex = -1;
     
     Paginator paginator;

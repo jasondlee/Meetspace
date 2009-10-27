@@ -5,6 +5,10 @@
       template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="content">
             <h:form id="memberForm">
+                <h:outputText rendered="#{empty memberBean.selected.id}" value="&lt;h1&gt;Add a Member&lt;/h1&gt;" escape="false"/>
+                <h:outputText rendered="#{!empty memberBean.selected.id}" value="&lt;h1&gt;Update a Member&lt;/h1&gt;" escape="false"/>
+                <h:commandLink action="#{memberBean.prepareList}" value="Member List" immediate="true"/>
+
                 <h:panelGrid columns="2">
                     <h:outputLabel value="First Name" for="firstName" />
                     <h:inputText id="firstName" value="#{memberBean.selected.firstName}" title="First Name" />
@@ -15,16 +19,8 @@
                     <h:outputLabel value="Email Address" for="emailAddress" />
                     <h:inputText id="emailAddress" value="#{memberBean.selected.emailAddress}" title="Email Address" />
                 </h:panelGrid>
-                <h:commandLink action="#{memberBean.create}" value="Add" rendered="#{empty memberBean.selected.id}"/>
-                <h:commandLink action="#{memberBean.update}" value="Update" rendered="#{!empty memberBean.selected.id}"/>
-                <br />
-                <br />
-                <h:commandLink action="view" value="View" immediate="true"/>
-                <br />
-                <h:commandLink action="#{memberBean.prepareList}" value="Member List" immediate="true"/>
-                <br />
-                <br />
-                <h:commandLink value="#{bundle.EditGroupMemberIndexLink}" action="/index" immediate="true" />
+                <h:commandButton action="#{memberBean.create}" value="Add" rendered="#{empty memberBean.selected.id}"/>
+                <h:commandButton action="#{memberBean.update}" value="Update" rendered="#{!empty memberBean.selected.id}"/>
             </h:form>
     </ui:define>
 </ui:composition>

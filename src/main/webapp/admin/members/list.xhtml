@@ -39,6 +39,14 @@
             </div>
             <div id="countdiv" style="text-align: center; float: left;">
                 <h:outputText value="#{memberBean.paginator.pageFirstItem + 1} to #{memberBean.paginator.pageLastItem + 1} of #{memberBean.paginator.itemsCount}"/>
+                (
+                <h:selectOneMenu id="rowsPerPage" value="#{memberBean.rowsPerPage}"
+                                 onchange="jsf.ajax.request(this, event, {execute: 'memberListForm:rowsPerPage', render: 'memberListForm'}); return false;">
+                    <f:selectItem itemValue="5" />
+                    <f:selectItem itemValue="10" />
+                    <f:selectItem itemValue="15" />
+                </h:selectOneMenu>
+                ) per page
             </div>
             <div id="nextdiv" style="text-align: right; float: left;">
                 &#160;
