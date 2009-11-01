@@ -33,15 +33,16 @@
                 </h:column>
             </h:dataTable>
             <div id="prevdiv" style="float: left;">
-                <h:commandLink id="prevLink" action="#{memberBean.previous}" value="Previous #{memberBean.paginator.pageSize}" rendered="#{memberBean.paginator.hasPreviousPage}"
-                               onclick="jsf.ajax.request(this, event, {execute: 'memberListForm:prevLink', render: 'memberListForm'}); return false;">
+                <h:commandLink id="prevLink" action="#{memberBean.previous}" value="Previous #{memberBean.paginator.pageSize}" rendered="#{memberBean.paginator.hasPreviousPage}">
+                    <f:ajax execute="@this" render="@form"/>
                 </h:commandLink>&#160;
             </div>
             <div id="countdiv" style="text-align: center; float: left;">
                 <h:outputText value="#{memberBean.paginator.pageFirstItem + 1} to #{memberBean.paginator.pageLastItem + 1} of #{memberBean.paginator.itemsCount}"/>
                 (
                 <h:selectOneMenu id="rowsPerPage" value="#{memberBean.rowsPerPage}"
-                                 onchange="jsf.ajax.request(this, event, {execute: 'memberListForm:rowsPerPage', render: 'memberListForm'}); return false;">
+                                 onchange1="jsf.ajax.request(this, event, {execute: 'memberListForm:rowsPerPage', render: 'memberListForm'}); return false;">
+                                 <f:ajax execute="@this" render="@form"/>
                     <f:selectItem itemValue="5" />
                     <f:selectItem itemValue="10" />
                     <f:selectItem itemValue="15" />
@@ -50,15 +51,15 @@
             </div>
             <div id="nextdiv" style="text-align: right; float: left;">
                 &#160;
-                <h:commandLink id="nextLink" action="#{memberBean.next}" value="Next #{memberBean.paginator.pageSize}" rendered="#{memberBean.paginator.hasNextPage}"
-                               onclick="jsf.ajax.request(this, event, {execute: 'memberListForm:nextLink', render: 'memberListForm'}); return false;">
+                <h:commandLink id="nextLink" action="#{memberBean.next}" value="Next #{memberBean.paginator.pageSize}" rendered="#{memberBean.paginator.hasNextPage}">
+                    <f:ajax execute="@this" render="@form"/>
                 </h:commandLink>
             </div>
             <script type="text/javascript">
                 var width = document.getElementById("memberListForm:memberTable").clientWidth;
-                document.getElementById("prevdiv").style.width = (width/3)+"px";
-                document.getElementById("countdiv").style.width = (width/3)+"px";
-                document.getElementById("nextdiv").style.width = (width/3)+"px";
+                document.getElementById("prevdiv").style.width = (width/4)+"px";
+                document.getElementById("countdiv").style.width = (width/2)+"px";
+                document.getElementById("nextdiv").style.width = (width/4)+"px";
             </script>
         </h:form>
     </ui:define>
