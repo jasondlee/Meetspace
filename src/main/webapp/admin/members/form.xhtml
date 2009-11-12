@@ -20,7 +20,8 @@
                     <h:inputText id="emailAddress" value="#{memberBean.selected.emailAddress}" title="Email Address" />
                 </h:panelGrid>
                 <h:commandButton action="#{memberBean.create}" value="Add" rendered="#{empty memberBean.selected.id}"/>
-                <h:commandButton action="#{memberBean.update}" value="Update" rendered="#{!empty memberBean.selected.id}"/>
+                <h:commandButton action="#{memberBean.edit}" value="Update" rendered="#{!empty memberBean.selected.id}"/>
+                <h:commandButton action="list" value="Cancel"/>
             </h:form>
     </ui:define>
 </ui:composition>

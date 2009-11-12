@@ -11,7 +11,7 @@ import com.steeplesoft.meetspace.view.util.JsfUtil;
 import com.steeplesoft.meetspace.view.util.Paginator;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
@@ -35,6 +35,7 @@ public class MemberBean implements Serializable {
     private DataModel dataModel;
     private int rowsPerPage = 5;
     private GroupMember current;
+    private int selectedItemIndex = -1;
 
     public int getRowsPerPage() {
         return rowsPerPage;
@@ -43,9 +44,7 @@ public class MemberBean implements Serializable {
     public void setRowsPerPage(int rowsPerPage) {
         this.rowsPerPage = rowsPerPage;
         resetList();
-        resetPagination(null);
     }
-    private int selectedItemIndex = -1;
     
     Paginator paginator;
 
@@ -53,12 +52,7 @@ public class MemberBean implements Serializable {
         dataModel = null;
     }
 
-    public String prepareList() {
-        resetList();
-        return NAV_LIST + NAV_REDIRECT;
-    }
-
-    public void resetPagination(ComponentSystemEvent event) {
+    public void resetPagination(ValueChangeEvent vce) {
         paginator = null;
     }
 
@@ -82,14 +76,6 @@ public class MemberBean implements Serializable {
 
     }
 
-    public DataModel getMembers() {
-        if (dataModel == null) {
-            dataModel = getPaginator().createPageDataModel();
-        }
-
-        return dataModel;
-    }
-
     public void next() {
         getPaginator().nextPage();
         resetList();
@@ -100,21 +86,74 @@ public class MemberBean implements Serializable {
         resetList();
     }
 
-    public String add() {
+    //**************************************************************************
+    // prepareFoo and Foo action methods
+    public String prepareList() {
+        resetList();
+        return NAV_LIST + NAV_REDIRECT;
+    }
+
+    public DataModel getList() {
+        if (dataModel == null) {
+            dataModel = getPaginator().createPageDataModel();
+        }
+
+        return dataModel;
+    }
+
+    public String prepareCreate() {
         current = new GroupMember();
         selectedItemIndex = -1;
         return NAV_ADD + NAV_REDIRECT;
     }
 
-    public String edit() {
-        current = (GroupMember)getMembers().getRowData();
-        selectedItemIndex = paginator.getPageFirstItem() + getMembers().getRowIndex();
+    public String create() {
+        try {
+            dataAccess.create(current);
+//            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GroupMemberCreated")); // Left as an example :)
+            JsfUtil.addSuccessMessage("Group member created");
+            return NAV_LIST + NAV_REDIRECT;
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsfUtil.addErrorMessage(e, "A persistence error occurred.");
+            return null;
+        }
+    }
+
+    public String prepareEdit() {
+        current = (GroupMember)getList().getRowData();
+        selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
         return NAV_EDIT + NAV_REDIRECT;
     }
 
-    public String view() {
-        current = (GroupMember)getMembers().getRowData();
-        selectedItemIndex = paginator.getPageFirstItem() + getMembers().getRowIndex();
+    public String edit() {
+        try {
+            dataAccess.edit(current);
+            JsfUtil.addSuccessMessage("Group member updated");
+            return NAV_LIST + NAV_REDIRECT;
+        } catch (Exception e) {
+           JsfUtil.addErrorMessage(e, "A persistence error occurred.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String delete() {
+        current = (GroupMember)getList().getRowData();
+        selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
+        try {
+            dataAccess.remove(current);
+            JsfUtil.addSuccessMessage("Group member deleted");
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, "A persistence error occurred.");
+        }
+        resetList();
+        return NAV_LIST + NAV_REDIRECT;
+    }
+
+    public String prepareView() {
+        current = (GroupMember)getList().getRowData();
+        selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
         return NAV_VIEW + NAV_REDIRECT;
     }
 
@@ -139,93 +178,4 @@ public class MemberBean implements Serializable {
         }
         return current;
     }
-
-    public String create() {
-        try {
-            dataAccess.create(current);
-//            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GroupMemberCreated"));
-            return NAV_LIST + NAV_REDIRECT;
-        } catch (Exception e) {
-            e.printStackTrace();
-//            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
-        }
-    }
-
-    public String update() {
-        try {
-            dataAccess.edit(current);
-            JsfUtil.addSuccessMessage("Group member updated");
-            return NAV_LIST + NAV_REDIRECT;
-        } catch (Exception e) {
-           JsfUtil.addErrorMessage(e, "A persistence error occurred.");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public String delete() {
-        current = (GroupMember)getMembers().getRowData();
-        selectedItemIndex = paginator.getPageFirstItem() + getMembers().getRowIndex();
-        performDestroy();
-        resetList();
-        return NAV_LIST + NAV_REDIRECT;
-    }
-
-    private void performDestroy() {
-        try {
-            dataAccess.remove(current);
-            JsfUtil.addSuccessMessage("Group member deleted");
-        } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, "A persistence error occurred.");
-        }
-    }
-
-    /*
-    @Inject
-    private MainService mainService;
-    private GroupMember member = new GroupMember();
-
-
-    @ManagedProperty("#{param.id}")
-    private Long memberId;
-
-    @PostConstruct
-    public void initMember() {
-        if (memberId != null) {
-            member = mainService.getMember(memberId);
-        }
-    }
-
-    public GroupMember getMember() {
-        return member;
-    }
-
-    public void setMember(GroupMember member) {
-        this.member = member;
-    }
-
-    public String save() {
-        mainService.saveMember(member);
-        FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage("The member '" + member.getFirstName() + " " +
-                member.getLastName() + "' was successfully saved"));
-        return "memberList";
-    }
-
-    public MainService getMainService() {
-        return mainService;
-    }
-
-    public void setMainService(MainService mainService) {
-        this.mainService = mainService;
-    }
-
-    public Long getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
-    */
 }

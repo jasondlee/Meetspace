@@ -63,7 +63,6 @@
             <version>${jsf.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>javax.persistence</artifactId>
@@ -83,7 +82,6 @@
             <scope>provided</scope>
         </dependency>
 
-
         <!--- COMPILE deps -->
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -91,28 +89,23 @@
             <version>1.0.1B</version>
             <scope>provided</scope>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>jsr250-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        -->
 
         <!-- RUNTIME deps -->
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
-            <version>1.0-CR1</version>
+            <version>1.0</version>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
             <version>1.0.0-CR1</version>
             <scope>runtime</scope>
         </dependency>
+        -->
  
         <dependency>
             <groupId>org.glassfish.web</groupId>
@@ -126,32 +119,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-         <!--
-         <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-api-bom</artifactId>
-            <version>${weld.api.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-         </dependency>
-
-         <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-core-bom</artifactId>
-            <version>${weld.core.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-         </dependency>
-
-         <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-extensions-bom</artifactId>
-            <version>${weld.extensions.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-         </dependency>
-         -->
 
         <!-- TEST deps -->
         <dependency>
