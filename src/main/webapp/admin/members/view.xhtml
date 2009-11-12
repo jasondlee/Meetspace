@@ -15,7 +15,7 @@
                     <h:outputLabel value="Email Address" for="emailAddress" />
                     <h:outputText id="emailAddress" value="#{memberBean.selected.emailAddress}" title="Email Address" />
                 </h:panelGrid>
-                <h:commandLink action="/admin/members/form" value="Edit"/>&#160;
+                <h:commandLink action="form" value="Edit"/>&#160;
                 <h:commandLink action="#{memberBean.prepareCreate}" value="Add New"/>&#160;
                 <h:commandLink action="#{memberBean.prepareList}" value="Member List" immediate="true"/>&#160;
             </h:form>
