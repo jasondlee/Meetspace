@@ -15,11 +15,14 @@ import javax.inject.Named;
  *
  * @author jasonlee
  */
-@Named("meeting")
+@Named("meetingBean")
 @RequestScoped
-public class MeetingBean {
-//    @ManagedProperty("#{meetingService}")
-//    @EJB(mappedName="ejb/meetingService")
+public class MeetingBean extends ControllerBean {
+    public static final String NAV_ADD = "/admin/meetings/form";
+    public static final String NAV_EDIT = "/admin/meetings/form";
+    public static final String NAV_LIST = "/admin/meetings/list";
+    public static final String NAV_VIEW = "/admin/meetings/view";
+
     @Inject
     MeetingService meetingService;
     Meeting nextMeeting = null;
@@ -38,5 +41,23 @@ public class MeetingBean {
 
     public void setMeetingService(MeetingService meetingService) {
         this.meetingService = meetingService;
+    }
+
+    public String getListViewId() {
+        return NAV_LIST;
+    }
+    public String getAddViewId() {
+        return NAV_ADD;
+    }
+    public String getEditViewId() {
+        return NAV_EDIT;
+    }
+    public String getViewViewId() {
+        return NAV_VIEW;
+    }
+
+    @Override
+    public Class getEntityClass() {
+        return Meeting.class;
     }
 }

@@ -9,10 +9,13 @@ import com.steeplesoft.meetspace.model.Meeting;
 import com.steeplesoft.meetspace.model.Registration;
 import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.MeetingService;
+
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
+import java.io.IOException;
 
 /**
  *
@@ -33,7 +36,18 @@ public class RegistrationBean {
     private Meeting meeting;
 
     public Meeting getMeeting() {
-        meeting = meetingService.getMeeting(meetingId);
+        final FacesContext facesContext = FacesContext.getCurrentInstance();
+        String id = facesContext.getExternalContext().getRequestParameterMap().get("meetingId");
+        if (id != null) {
+            meetingId = Long.parseLong(id);
+            meeting = meetingService.getMeeting(meetingId);
+        } else {
+            try {
+                facesContext.getExternalContext().redirect("/");
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
         return meeting;
     }
 

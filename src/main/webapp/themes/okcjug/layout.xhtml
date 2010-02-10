@@ -42,21 +42,21 @@
                     <!-- navigation START -->
                     <div id="navigation">
                         <ul id="menus">
-                            <li class="page_item"><a class="home" title="Home" href="http://okcjug.org/">Home</a></li>
+                            <li class="page_item"><a class="home" title="Home" href="#{request.contextPath}">Home</a></li>
 
-                            <li class="page_item page-item-2"><a href="http://okcjug.org/about" title="About">About</a>
+                            <li class="page_item page-item-2"><a href="#{request.contextPath}/about" title="About">About</a>
                                 <ul>
                                     <li class="page_item page-item-186"><a href="http://okcjug.org/about/sponsorship-information" title="Sponsorship Information">Sponsorship Information</a></li>
                                 </ul>
                             </li>
-                            <li class="page_item page-item-180"><a href="http://okcjug.org/registration" title="Registration">Registration</a></li>
-                            <li class="page_item page-item-184"><a href="http://okcjug.org/contact-us" title="Contact Us">Contact Us</a></li>
+                            <li class="page_item page-item-180"><a href="#{request.contextPath}/registration" title="Registration">Registration</a></li>
+                            <li class="page_item page-item-184"><a href="#{request.contextPath}/contact-us" title="Contact Us">Contact Us</a></li>
                             <li><a class="lastmenu" href="javascript:void(0);"></a></li>
                         </ul>
 
                         <!-- searchbox START -->
                         <div id="searchbox">
-                            <form action="http://okcjug.org" method="get">
+                            <form action="#{request.contextPath}" method="get">
                                 <div class="content">
                                     <input type="text" class="textfield" name="s" size="24" value="" />
                                     <span class="switcher" >Switcher</span>
@@ -97,17 +97,17 @@
                                 <div class="content">
 
                                     <div id="subscribe">
-                                        <a id="feedrss" title="Subscribe to this blog..." href="http://okcjug.org/feed"><abbr title="Really Simple Syndication">RSS</abbr> feed</a>
+                                        <a id="feedrss" title="Subscribe to this blog..." href="#{request.contextPath}/feed"><abbr title="Really Simple Syndication">RSS</abbr> feed</a>
                                         <ul id="feed_readers">
-                                            <li id="google_reader"><a class="reader" title="Subscribe with Google" href="http://fusion.google.com/add?feedurl=http://okcjug.org/feed"><span>Google</span></a></li>
-                                            <li id="youdao_reader"><a class="reader" title="Subscribe with Youdao" href="http://reader.youdao.com/#url=http://okcjug.org/feed"><span>Youdao</span></a></li>
-                                            <li id="xianguo_reader"><a class="reader" title="Subscribe with Xian Guo" href="http://www.xianguo.com/subscribe.php?url=http://okcjug.org/feed"><span>Xian Guo</span></a></li>
+                                            <li id="google_reader"><a class="reader" title="Subscribe with Google" href="http://fusion.google.com/add?feedurl=#{request.contextPath}/feed"><span>Google</span></a></li>
+                                            <li id="youdao_reader"><a class="reader" title="Subscribe with Youdao" href="http://reader.youdao.com/#url=#{request.contextPath}/feed"><span>Youdao</span></a></li>
+                                            <li id="xianguo_reader"><a class="reader" title="Subscribe with Xian Guo" href="http://www.xianguo.com/subscribe.php?url=#{request.contextPath}/feed"><span>Xian Guo</span></a></li>
 
-                                            <li id="zhuaxia_reader"><a class="reader" title="Subscribe with Zhua Xia" href="http://www.zhuaxia.com/add_channel.php?url=http://okcjug.org/feed"><span>Zhua Xia</span></a></li>
-                                            <li id="yahoo_reader"><a class="reader" title="Subscribe with My Yahoo!"	href="http://add.my.yahoo.com/rss?url=http://okcjug.org/feed"><span>My Yahoo!</span></a></li>
-                                            <li id="newsgator_reader"><a class="reader" title="Subscribe with newsgator"	href="http://www.newsgator.com/ngs/subscriber/subfext.aspx?url=http://okcjug.org/feed"><span>newsgator</span></a></li>
-                                            <li id="bloglines_reader"><a class="reader" title="Subscribe with Bloglines"	href="http://www.bloglines.com/sub/http://okcjug.org/feed"><span>Bloglines</span></a></li>
-                                            <li id="inezha_reader"><a class="reader" title="Subscribe with iNezha"	href="http://inezha.com/add?url=http://okcjug.org/feed"><span>iNezha</span></a></li>
+                                            <li id="zhuaxia_reader"><a class="reader" title="Subscribe with Zhua Xia" href="http://www.zhuaxia.com/add_channel.php?url=#{request.contextPath}/feed"><span>Zhua Xia</span></a></li>
+                                            <li id="yahoo_reader"><a class="reader" title="Subscribe with My Yahoo!"	href="http://add.my.yahoo.com/rss?url=#{request.contextPath}/feed"><span>My Yahoo!</span></a></li>
+                                            <li id="newsgator_reader"><a class="reader" title="Subscribe with newsgator"	href="http://www.newsgator.com/ngs/subscriber/subfext.aspx?url=#{request.contextPath}/feed"><span>newsgator</span></a></li>
+                                            <li id="bloglines_reader"><a class="reader" title="Subscribe with Bloglines"	href="http://www.bloglines.com/sub/#{request.contextPath}/feed"><span>Bloglines</span></a></li>
+                                            <li id="inezha_reader"><a class="reader" title="Subscribe with iNezha"	href="http://inezha.com/add?url=#{request.contextPath}/feed"><span>iNezha</span></a></li>
                                         </ul>
 
                                     </div>
@@ -117,7 +117,7 @@
 
                             <div class="widget">
                                 <h3>Partner</h3>
-                                <a href="http://okccoco.com" style="border: 0; width: 168px; display: block; margin: auto;"><img src="http://okcjug.org/wp-content/uploads/2009/09/okccoco-transparent.png"/></a>
+                                <a href="http://okccoco.com" style="border: 0; width: 168px; display: block; margin: auto;"><img src="#{request.contextPath}/wp-content/uploads/2009/09/okccoco-transparent.png"/></a>
                             </div>
 
                             <div class="widget">
@@ -133,7 +133,7 @@
                                 <h3>Random Posts</h3>
 
                                 <ul>
-                                    <li><a href="http://okcjug.org/meetings/september-2009">September 2009</a></li><li><a href="http://okcjug.org/meetings/september-2007">September 2007</a></li><li><a href="http://okcjug.org/bios/scott-centille">Scott Centille</a></li><li><a href="http://okcjug.org/bios/michael-e-shorter">Michael E. Shorter</a></li><li><a href="http://okcjug.org/meetings/june-2008">June 2008</a></li>		</ul>
+                                    <li><a href="#{request.contextPath}/meetings/september-2009">September 2009</a></li><li><a href="#{request.contextPath}/meetings/september-2007">September 2007</a></li><li><a href="#{request.contextPath}/bios/scott-centille">Scott Centille</a></li><li><a href="#{request.contextPath}/bios/michael-e-shorter">Michael E. Shorter</a></li><li><a href="#{request.contextPath}/meetings/june-2008">June 2008</a></li>		</ul>
                             </div>
 
                             <!-- recent comments -->
@@ -157,12 +157,12 @@
                                 <div class="widget widget_categories">
                                     <h3>Categories</h3>
                                     <ul>
-                                        <li class="cat-item cat-item-6"><a href="http://okcjug.org/category/general-information" title="View all posts filed under General Information">General Information</a>
+                                        <li class="cat-item cat-item-6"><a href="#{request.contextPath}/category/general-information" title="View all posts filed under General Information">General Information</a>
                                         </li>
-                                        <li class="cat-item cat-item-5"><a href="http://okcjug.org/category/meetings" title="View all posts filed under Meeting Information">Meeting Information</a>
+                                        <li class="cat-item cat-item-5"><a href="#{request.contextPath}/category/meetings" title="View all posts filed under Meeting Information">Meeting Information</a>
                                         </li>
 
-                                        <li class="cat-item cat-item-3"><a href="http://okcjug.org/category/bios" title="View all posts filed under Speaker Bios">Speaker Bios</a>
+                                        <li class="cat-item cat-item-3"><a href="#{request.contextPath}/category/bios" title="View all posts filed under Speaker Bios">Speaker Bios</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -178,8 +178,8 @@
                                 <div class="widget widget_archive">
                                     <h3>Archives</h3>
                                     <ul>
-                                        <li><a href='http://okcjug.org/2009/10' title='October 2009'>October 2009</a></li>
-                                        <li><a href='http://okcjug.org/2009/09' title='September 2009'>September 2009</a></li>
+                                        <li><a href='#{request.contextPath}/2009/10' title='October 2009'>October 2009</a></li>
+                                        <li><a href='#{request.contextPath}/2009/09' title='September 2009'>September 2009</a></li>
                                     </ul>
 
                                 </div>
@@ -197,7 +197,7 @@
 
                                 <h3>Meta</h3>
                                 <ul>
-                                    <li><a href="http://okcjug.org/wp-admin/">Site Admin</a></li>			<li><a href="http://okcjug.org/wp-login.php?action=logout&amp;_wpnonce=a3bc0301ef">Log out</a></li>
+                                    <li><a href="#{request.contextPath}/wp-admin/">Site Admin</a></li>			<li><a href="#{request.contextPath}/wp-login.php?action=logout&amp;_wpnonce=a3bc0301ef">Log out</a></li>
                                 </ul>
                             </div>
 
