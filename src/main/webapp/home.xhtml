@@ -19,20 +19,20 @@
             <tr>
                 <td>Name:</td>
                 <td>
-                    #{meetingBean.nextmeetingBean.name} (Register <a href="#{request.contextPath}/register.jsf?meetingId=#{meetingBean.nextmeetingBean.id}">here</a>)
+                    #{meetingBean.nextMeeting.name} (Register <a href="#{request.contextPath}/register.jsf?meetingId=#{meetingBean.nextMeeting.id}">here</a>)
                 </td>
             </tr>
             <tr>
                 <td>Date:</td>
                 <td>
-                    <h:outputText value="#{meetingBean.nextmeetingBean.startDate}">
+                    <h:outputText value="#{meetingBean.nextMeeting.startDate}">
                         <f:convertDateTime type="date" dateStyle="medium"/>
                     </h:outputText>
                 </td>
             </tr>
             <tr>
                 <td>Description:</td>
-                <td>#{meetingBean.nextmeetingBean.description}</td>
+                <td>#{meetingBean.nextMeeting.description}</td>
             </tr>
         </table>
     </ui:define>

@@ -5,22 +5,31 @@
       template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="content">
             <h:form id="memberForm">
-                <h:outputText rendered="#{empty memberBean.selected.id}" value="&lt;h1&gt;Add a Member&lt;/h1&gt;" escape="false"/>
-                <h:outputText rendered="#{!empty memberBean.selected.id}" value="&lt;h1&gt;Update a Member&lt;/h1&gt;" escape="false"/>
-                <h:commandLink action="#{memberBean.prepareList}" value="Member List" immediate="true"/>
+                <h:outputText rendered="#{empty meetingBean.selected.id}" value="&lt;h1&gt;Add a Meeting&lt;/h1&gt;" escape="false"/>
+                <h:outputText rendered="#{!empty meetingBean.selected.id}" value="&lt;h1&gt;Update a Meeting&lt;/h1&gt;" escape="false"/>
+                <h:commandLink action="#{meetingBean.prepareList}" value="Member List" immediate="true"/>
 
                 <h:panelGrid columns="2">
-                    <h:outputLabel value="First Name" for="firstName" />
-                    <h:inputText id="firstName" value="#{memberBean.selected.firstName}" title="First Name" />
+                    <h:outputLabel value="Meeting Name" for="name" />
+                    <h:inputText id="name" value="#{meetingBean.selected.name}" title="Name" />
 
-                    <h:outputLabel value="Last Name" for="lastName" />
-                    <h:inputText id="lastName" value="#{memberBean.selected.lastName}" title="Last Name" />
+                    <h:outputLabel value="Start Date" for="startDate" />
+                    <h:inputText id="startDate" value="#{meetingBean.selected.startDate}" title="Start Date" />
 
-                    <h:outputLabel value="Email Address" for="emailAddress" />
-                    <h:inputText id="emailAddress" value="#{memberBean.selected.emailAddress}" title="Email Address" />
+                    <h:outputLabel value="End Date" for="endDate" />
+                    <h:inputText id="endDate" value="#{meetingBean.selected.endDate}" title="End Date" />
+
+                    <h:outputLabel value="Start Time" for="startTime" />
+                    <h:inputText id="startTime" value="#{meetingBean.selected.startTime}" title="Start Time" />
+
+                    <h:outputLabel value="End Time" for="endTime" />
+                    <h:inputText id="endTime" value="#{meetingBean.selected.endTime}" title="End Time" />
+
+                    <h:outputLabel value="Description" for="description" />
+                    <h:inputTextarea id="description" value="#{meetingBean.selected.description}" title="Description" />
                 </h:panelGrid>
-                <h:commandButton action="#{memberBean.create}" value="Add" rendered="#{empty memberBean.selected.id}"/>
-                <h:commandButton action="#{memberBean.edit}" value="Update" rendered="#{!empty memberBean.selected.id}"/>
+                <h:commandButton action="#{meetingBean.create}" value="Add" rendered="#{empty meetingBean.selected.id}"/>
+                <h:commandButton action="#{meetingBean.edit}" value="Update" rendered="#{!empty meetingBean.selected.id}"/>
                 <h:commandButton action="list" value="Cancel"/>
             </h:form>
     </ui:define>

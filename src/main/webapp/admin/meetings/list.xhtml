@@ -14,11 +14,18 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header"><h:outputText style="font-weight: bold;" value="Date(s)"/></f:facet>
-                    #{meeting.startDate}
+                    <h:outputText value="#{meeting.startDate}">
+                        <f:convertDateTime dateStyle="medium"/>
+                    </h:outputText>
                 </h:column>
                 <h:column>
                     <f:facet name="header"><h:outputText style="font-weight: bold;" value="Time"/></f:facet>
-                    #{meeting.startTime} - #{meeting.endTime}
+                    <h:outputText value="#{meeting.startTime}">
+                        <f:convertDateTime type="time" timeStyle="short"/>
+                    </h:outputText> -
+                    <h:outputText value="#{meeting.endTime}">
+                        <f:convertDateTime type="time" timeStyle="short"/>
+                    </h:outputText>
                 </h:column>
                 <h:column>
                     <f:facet name="header"><h:outputText style="font-weight: bold;" value="Description"/></f:facet>
