@@ -15,6 +15,12 @@
     <name>Meet Space</name>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>plugin-engine</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- PROVIDED deps -->
         <dependency>
             <groupId>com.sun.faces</groupId>
