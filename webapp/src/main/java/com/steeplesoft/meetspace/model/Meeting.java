@@ -59,7 +59,7 @@ public class Meeting implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date startTime;
     @OneToMany(mappedBy = "meeting")
-    private Collection<Registration> registrationCollection;
+    private Collection<Registration> registrations;
 
     public Meeting() {
     }
@@ -124,12 +124,12 @@ public class Meeting implements Serializable {
         this.startTime = startTime;
     }
 
-    public Collection<Registration> getRegistrationCollection() {
-        return registrationCollection;
+    public Collection<Registration> getRegistrations() {
+        return registrations;
     }
 
-    public void setRegistrationCollection(Collection<Registration> registrationCollection) {
-        this.registrationCollection = registrationCollection;
+    public void setRegistrations(Collection<Registration> registrations) {
+        this.registrations = registrations;
     }
 
     @Override

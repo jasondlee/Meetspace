@@ -5,28 +5,25 @@
 
 package com.steeplesoft.meetspace.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 
 /**
- *
  * @author jasonlee
  */
 @Entity
 @Table(name = "registration")
-@NamedQueries({@NamedQuery(name = "Registration.findAll", query = "SELECT r FROM Registration r"), @NamedQuery(name = "Registration.findById", query = "SELECT r FROM Registration r WHERE r.id = :id"), @NamedQuery(name = "Registration.findByEmailAddress", query = "SELECT r FROM Registration r WHERE r.emailAddress = :emailAddress"), @NamedQuery(name = "Registration.findByFullName", query = "SELECT r FROM Registration r WHERE r.fullName = :fullName")})
+@NamedQueries({
+        @NamedQuery(name = "Registration.findAll", query = "SELECT r FROM Registration r"),
+        @NamedQuery(name = "Registration.findById", query = "SELECT r FROM Registration r WHERE r.id = :id"),
+        @NamedQuery(name = "Registration.findByEmailAddress", query = "SELECT r FROM Registration r WHERE r.emailAddress = :emailAddress"),
+        @NamedQuery(name = "Registration.findByFullName", query = "SELECT r FROM Registration r WHERE r.fullName = :fullName")
+})
 public class Registration implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
     @Column(name = "emailAddress", length = 255)

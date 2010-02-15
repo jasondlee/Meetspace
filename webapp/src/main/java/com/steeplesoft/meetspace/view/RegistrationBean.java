@@ -10,12 +10,14 @@ import com.steeplesoft.meetspace.model.Registration;
 import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.MeetingService;
 
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  *
@@ -23,7 +25,7 @@ import java.io.IOException;
  */
 @Named("regBean")
 @RequestScoped
-public class RegistrationBean {
+public class RegistrationBean implements Serializable {
     @Inject
     private MeetingService meetingService;
     @Inject

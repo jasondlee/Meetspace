@@ -5,19 +5,43 @@
       template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="content">
             <h:form id="memberForm">
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="First Name" for="firstName" />
-                    <h:outputText id="firstName" value="#{memberBean.selected.firstName}" title="First Name" />
+                <h:panelGrid columns="2" style="vertical-align: top">
+                    <h:outputLabel value="Name" for="meetingName" />
+                    <h:outputText id="meetingName" value="#{meetingBean.selected.name}" title="Name" />
 
-                    <h:outputLabel value="Last Name" for="lastName" />
-                    <h:outputText id="lastName" value="#{memberBean.selected.lastName}" title="Last Name" />
+                    <h:outputLabel value="Description" for="description" />
+                    <h:outputText id="description" value="#{meetingBean.selected.description}" title="Description" />
+                    
+                    <h:outputLabel value="Date(s)" />
+                    <h:panelGroup>
+                        <h:outputText value="#{meetingBean.selected.startDate}">
+                            <f:convertDateTime dateStyle="medium"/>
+                        </h:outputText>
+                        &#160;
+                        <h:outputText value="#{meeting.startTime}">
+                            <f:convertDateTime type="time" timeStyle="short"/>
+                        </h:outputText>
+                        <br/>
+                        <h:outputText value="#{meetingBean.selected.endDate}">
+                            <f:convertDateTime dateStyle="medium"/>
+                        </h:outputText>
+                        &#160;
+                        <h:outputText value="#{meeting.endTime}">
+                            <f:convertDateTime type="time" timeStyle="short"/>
+                        </h:outputText>
+                    </h:panelGroup>
 
-                    <h:outputLabel value="Email Address" for="emailAddress" />
-                    <h:outputText id="emailAddress" value="#{memberBean.selected.emailAddress}" title="Email Address" />
+                    <h:outputText value="Registrations (#{meetingBean.selected.registrations.size()})"/>
+                    <h:dataTable value="#{meetingBean.selected.registrations}" var="registration">
+                        <h:column>
+                            #{registration.fullName}
+                        </h:column>
+                    </h:dataTable>
+
                 </h:panelGrid>
                 <h:commandLink action="form" value="Edit"/>&#160;
-                <h:commandLink action="#{memberBean.prepareCreate}" value="Add New"/>&#160;
-                <h:commandLink action="#{memberBean.prepareList}" value="Member List" immediate="true"/>&#160;
+                <h:commandLink action="#{meetingBean.prepareCreate}" value="Add New"/>&#160;
+                <h:commandLink action="#{meetingBean.prepareList}" value="Meeting List" immediate="true"/>&#160;
             </h:form>
     </ui:define>
 </ui:composition>

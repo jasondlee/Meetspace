@@ -12,7 +12,7 @@
     <artifactId>plugin-engine</artifactId>
     <packaging>jar</packaging>
     <version>${project.parent.version}</version>
-    <name>Meet Space</name>
+    <name>Meet Space Plugin Engine</name>
 
     <dependencies>
         <!-- PROVIDED deps -->

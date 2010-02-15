@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 
 /**
  *
@@ -18,9 +19,9 @@ import javax.persistence.PersistenceContext;
  */
 @Named
 @ApplicationScoped
-public class MeetingServiceImpl implements MeetingService {
+public class MeetingServiceImpl implements MeetingService, Serializable {
     @PersistenceContext(name = "em")
-    protected EntityManager em;
+    private EntityManager em;
 
     @Override
     public Meeting getUpcomingMeeting() {

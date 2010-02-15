@@ -17,7 +17,7 @@ public class PluginBean {
     public PluginBean() {
         String home = System.getenv("MEETSPACE_HOME");
         if (home == null) {
-            home = System.getProperty("user.home");
+            home = System.getProperty("user.home") + File.separator + ".meetspace";
         }
         pe = new JsfPluginEngine(home + File.separatorChar + "/plugins", "com.steeplesoft.meetspace.plugins");
     }
