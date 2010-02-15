@@ -147,11 +147,19 @@ public class PluginEngine {
             }
         }
 
-        if ((c != null) && c.isAnnotationPresent(Plugin.class)) {
-            PluginMetadata pm = new PluginMetadata(c);
-            List<Class<?>> list = getPluginClassList(pm.getType());
-            list.add(c);
+        if (c != null) {
+            if (c.isAnnotationPresent(Plugin.class)) {
+                PluginMetadata pm = new PluginMetadata(c);
+                List<Class<?>> list = getPluginClassList(pm.getType());
+                list.add(c);
+            }
+
+            postProcessClass(c);
         }
+    }
+
+    protected void postProcessClass(Class<?> c) {
+        //noop
     }
 
     protected static String convertToClassName(String name) {

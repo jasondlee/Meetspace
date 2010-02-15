@@ -1,5 +1,6 @@
 package com.steeplesoft.meetspace.view;
 
+import com.steeplesoft.meetspace.plugins.JsfPluginEngine;
 import com.steeplesoft.meetspace.plugins.PluginEngine;
 import com.steeplesoft.meetspace.plugins.PluginMetadata;
 
@@ -7,15 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jasonlee
- * Date: Feb 12, 2010
- * Time: 9:01:56 AM
- * To change this template use File | Settings | File Templates.
- */
 @Named
 @ApplicationScoped
 public class PluginBean {
@@ -26,7 +19,7 @@ public class PluginBean {
         if (home == null) {
             home = System.getProperty("user.home");
         }
-        pe = new PluginEngine(home + File.separatorChar + "/plugins", "com.steeplesoft.meetspace.plugins");
+        pe = new JsfPluginEngine(home + File.separatorChar + "/plugins", "com.steeplesoft.meetspace.plugins");
     }
 
     public List<Object> getPlugins(String type) {
