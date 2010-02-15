@@ -4,9 +4,12 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 
+import javax.faces.application.Application;
 import javax.faces.bean.*;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.FacesConverter;
+import javax.faces.validator.FacesValidator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -19,6 +22,11 @@ public class JsfPluginEngine extends PluginEngine {
             ViewScoped.class,
             NoneScoped.class,
             CustomScoped.class
+    };
+    private static final Class<?>[] ANNOTATIONS = {
+            ManagedBean.class,
+            FacesConverter.class,
+            FacesValidator.class
     };
 
     public JsfPluginEngine(String pluginDir) {
@@ -35,43 +43,79 @@ public class JsfPluginEngine extends PluginEngine {
 
     @Override
     protected void postProcessClass(Class<?> c) {
-        ManagedBean annotation = c.getAnnotation(ManagedBean.class);
-        if (annotation != null) {
-            final FacesContext facesContext = FacesContext.getCurrentInstance();
-            final ExternalContext externalContext = facesContext.getExternalContext();
-            ApplicationAssociate associate = ApplicationAssociate.getInstance(externalContext);
-            BeanManager manager = associate.getBeanManager();
-            String name = getManagedBeanName(c, annotation);
-            String scope = getScope(c);
-            boolean eager = annotation.eager();
-            Map<String,Field> annotatedFields = new LinkedHashMap<String,Field>();
-            collectAnnotatedFields(c, annotatedFields);
-            List<ManagedBeanInfo.ManagedProperty> properties = null;
-
-            if (!annotatedFields.isEmpty()) {
-                properties = new ArrayList<ManagedBeanInfo.ManagedProperty>(annotatedFields.size());
-                for (Map.Entry<String,Field> entry : annotatedFields.entrySet()) {
-                    Field f = entry.getValue();
-                    ManagedProperty property = f.getAnnotation(ManagedProperty.class);
-                    ManagedBeanInfo.ManagedProperty propertyInfo =
-                              new ManagedBeanInfo.ManagedProperty(entry.getKey(),
-                                                                  f.getType().getName(),
-                                                                  property.value(),
-                                                                  null,
-                                                                  null);
-                    properties.add(propertyInfo);
+        for (Class<?> scope : ANNOTATIONS) {
+            Annotation a = c.getAnnotation((Class<? extends Annotation>) scope);
+            if (a != null) {
+                if (a instanceof ManagedBean) {
+                    processManagedBean(c, (ManagedBean) a);
+                } else if (a instanceof FacesConverter) {
+                    processConverter(c, (FacesConverter) a);
+                } else if (a instanceof FacesValidator) {
+                    processsValidator(c, (FacesValidator) a);
                 }
             }
-
-            manager.register(new ManagedBeanInfo(name,
-                                   c.getName(),
-                                   scope,
-                                   eager,
-                                   null,
-                                   null,
-                                   properties,
-                                   null));
         }
+    }
+
+    private void processsValidator(Class<?> c, FacesValidator facesValidator) {
+        Application app = FacesContext.getCurrentInstance().getApplication();
+        Object key;
+        app.addValidator(facesValidator.value(), c.getName());
+        if (facesValidator.isDefault()) {
+            app.addDefaultValidatorId(facesValidator.value());
+        }
+    }
+
+    private void processConverter(Class<?> c, FacesConverter facesConverter) {
+        Application app = FacesContext.getCurrentInstance().getApplication();
+        Object key;
+        if (facesConverter.value().length() == 0) {
+            key = facesConverter.forClass();
+        } else {
+            key = facesConverter.value();
+        }
+        if (key instanceof Class) {
+            app.addConverter((Class) key, c.getName());
+        } else {
+            app.addConverter((String) key, c.getName());
+        }
+    }
+
+    protected void processManagedBean(Class<?> c, ManagedBean annotation) {
+        final FacesContext facesContext = FacesContext.getCurrentInstance();
+        final ExternalContext externalContext = facesContext.getExternalContext();
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(externalContext);
+        BeanManager manager = associate.getBeanManager();
+        String name = getManagedBeanName(c, annotation);
+        String scope = getScope(c);
+        boolean eager = annotation.eager();
+        Map<String, Field> annotatedFields = new LinkedHashMap<String, Field>();
+        collectAnnotatedFields(c, annotatedFields);
+        List<ManagedBeanInfo.ManagedProperty> properties = null;
+
+        if (!annotatedFields.isEmpty()) {
+            properties = new ArrayList<ManagedBeanInfo.ManagedProperty>(annotatedFields.size());
+            for (Map.Entry<String, Field> entry : annotatedFields.entrySet()) {
+                Field f = entry.getValue();
+                ManagedProperty property = f.getAnnotation(ManagedProperty.class);
+                ManagedBeanInfo.ManagedProperty propertyInfo =
+                        new ManagedBeanInfo.ManagedProperty(entry.getKey(),
+                                f.getType().getName(),
+                                property.value(),
+                                null,
+                                null);
+                properties.add(propertyInfo);
+            }
+        }
+
+        manager.register(new ManagedBeanInfo(name,
+                c.getName(),
+                scope,
+                eager,
+                null,
+                null,
+                properties,
+                null));
     }
 
     private String getManagedBeanName(Class<?> c, ManagedBean mb) {
@@ -85,7 +129,7 @@ public class JsfPluginEngine extends PluginEngine {
         }
         return name;
     }
-    
+
     private String getScope(Class<?> c) {
         String result = "request"; // default
         for (Class<?> scope : SCOPES) {
@@ -110,7 +154,7 @@ public class JsfPluginEngine extends PluginEngine {
         return result;
     }
 
-    private void collectAnnotatedFields(Class<?> baseClass, Map<String,Field> annotatedFields) {
+    private void collectAnnotatedFields(Class<?> baseClass, Map<String, Field> annotatedFields) {
 
         Field[] fields = baseClass.getDeclaredFields();
         for (Field field : fields) {
