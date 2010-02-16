@@ -6,13 +6,13 @@
     <ui:define name="content">
             <h:form id="memberForm">
                 <h:panelGrid columns="2" style="vertical-align: top">
-                    <h:outputLabel value="Name" for="meetingName" />
+                    <h:outputText value="Name" />
                     <h:outputText id="meetingName" value="#{meetingBean.selected.name}" title="Name" />
 
-                    <h:outputLabel value="Description" for="description" />
+                    <h:outputText value="Description"/>
                     <h:outputText id="description" value="#{meetingBean.selected.description}" title="Description" />
                     
-                    <h:outputLabel value="Date(s)" />
+                    <h:outputText value="Date(s)" />
                     <h:panelGroup>
                         <h:outputText value="#{meetingBean.selected.startDate}">
                             <f:convertDateTime dateStyle="medium"/>

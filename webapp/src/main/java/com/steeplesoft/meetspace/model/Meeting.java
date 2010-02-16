@@ -4,6 +4,7 @@
  */
 package com.steeplesoft.meetspace.model;
 
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -17,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -42,22 +44,30 @@ public class Meeting implements Serializable {
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
     private Integer id;
+
     @Column(name = "description", length = 255)
     private String description;
+
     @Column(name = "endDate")
     @Temporal(TemporalType.DATE)
     private Date endDate;
+
     @Column(name = "endTime")
     @Temporal(TemporalType.TIME)
     private Date endTime;
+
     @Column(name = "name", length = 255)
+    @NotNull
     private String name;
+
     @Column(name = "startDate")
     @Temporal(TemporalType.DATE)
     private Date startDate;
+
     @Column(name = "startTime")
     @Temporal(TemporalType.TIME)
     private Date startTime;
+    
     @OneToMany(mappedBy = "meeting")
     private Collection<Registration> registrations;
 

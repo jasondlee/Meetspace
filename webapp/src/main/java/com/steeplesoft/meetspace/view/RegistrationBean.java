@@ -39,9 +39,12 @@ public class RegistrationBean implements Serializable {
 
     public Meeting getMeeting() {
         final FacesContext facesContext = FacesContext.getCurrentInstance();
-        String id = facesContext.getExternalContext().getRequestParameterMap().get("meetingId");
-        if (id != null) {
+
+        if (meetingId == null) {
+            String id = facesContext.getExternalContext().getRequestParameterMap().get("meetingId");
             meetingId = Long.parseLong(id);
+        }
+        if (meetingId != null) {
             meeting = meetingService.getMeeting(meetingId);
         } else {
             try {
@@ -62,9 +65,13 @@ public class RegistrationBean implements Serializable {
     }
 
     public String saveRegistration() {
-        registration.setMeeting(meeting);
-        mainService.saveRegistration(registration);
-        return "/home";
+        registration.setMeeting(getMeeting());
+        registration = mainService.saveRegistration(registration);
+        if (registration == null) {
+            return null;
+        } else {
+            return "/home";
+        }
     }
 
     public Long getMeetingId() {

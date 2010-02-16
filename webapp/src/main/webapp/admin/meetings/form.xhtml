@@ -4,7 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
       template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="content">
-            <h:form id="memberForm">
+            <h:form id="meetingForm">
                 <h:outputText rendered="#{empty meetingBean.selected.id}" value="&lt;h1&gt;Add a Meeting&lt;/h1&gt;" escape="false"/>
                 <h:outputText rendered="#{!empty meetingBean.selected.id}" value="&lt;h1&gt;Update a Meeting&lt;/h1&gt;" escape="false"/>
                 <h:commandLink action="#{meetingBean.prepareList}" value="Member List" immediate="true"/>
@@ -14,16 +14,24 @@
                     <h:inputText id="name" value="#{meetingBean.selected.name}" title="Name" />
 
                     <h:outputLabel value="Start Date" for="startDate" />
-                    <h:inputText id="startDate" value="#{meetingBean.selected.startDate}" title="Start Date" />
+                    <h:inputText id="startDate" value="#{meetingBean.selected.startDate}" title="Start Date">
+                        <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    </h:inputText>
 
                     <h:outputLabel value="End Date" for="endDate" />
-                    <h:inputText id="endDate" value="#{meetingBean.selected.endDate}" title="End Date" />
+                    <h:inputText id="endDate" value="#{meetingBean.selected.endDate}" title="End Date">
+                        <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    </h:inputText>
 
                     <h:outputLabel value="Start Time" for="startTime" />
-                    <h:inputText id="startTime" value="#{meetingBean.selected.startTime}" title="Start Time" />
+                    <h:inputText id="startTime" value="#{meetingBean.selected.startTime}" title="Start Time">
+                        <f:convertDateTime type="time" pattern="KK:mma"/>
+                    </h:inputText>
 
                     <h:outputLabel value="End Time" for="endTime" />
-                    <h:inputText id="endTime" value="#{meetingBean.selected.endTime}" title="End Time" />
+                    <h:inputText id="endTime" value="#{meetingBean.selected.endTime}" title="End Time">
+                        <f:convertDateTime type="time" pattern="KK:mma"/>
+                    </h:inputText>
 
                     <h:outputLabel value="Description" for="description" />
                     <h:inputTextarea id="description" value="#{meetingBean.selected.description}" title="Description" />

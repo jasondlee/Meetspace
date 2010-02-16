@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Named
 @ApplicationScoped
 public class MeetingServiceImpl implements MeetingService, Serializable {
-    @PersistenceContext(name = "em")
+    @PersistenceContext//(name = "em")
     private EntityManager em;
 
     @Override

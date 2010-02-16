@@ -23,7 +23,7 @@ import javax.persistence.Query;
 @Named
 @ApplicationScoped
 public class PreferencesServiceImpl implements PreferencesService, Serializable {
-    @PersistenceContext(name = "em")
+    @PersistenceContext//(name = "em")
     protected EntityManager em;
 
     public PreferencesServiceImpl() {

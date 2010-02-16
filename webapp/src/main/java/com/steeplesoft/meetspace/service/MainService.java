@@ -12,5 +12,5 @@ import com.steeplesoft.meetspace.model.Registration;
  * @author jasonlee
  */
 public interface MainService {
-    public void saveRegistration(Registration reg);
+    public Registration saveRegistration(Registration reg);
 }

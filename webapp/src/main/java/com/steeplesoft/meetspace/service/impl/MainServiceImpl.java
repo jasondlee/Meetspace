@@ -8,8 +8,11 @@ package com.steeplesoft.meetspace.service.impl;
 import com.steeplesoft.meetspace.model.GroupMember;
 import com.steeplesoft.meetspace.model.Registration;
 import com.steeplesoft.meetspace.service.MainService;
+import com.steeplesoft.meetspace.util.Transactional;
 
+import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -24,11 +27,12 @@ import java.util.List;
  * @author jasonlee
  */
 @Named
-@ApplicationScoped
+@SessionScoped
 public class MainServiceImpl implements MainService, Serializable {
     @Inject
     private UserTransaction txn;
-    @PersistenceContext(name = "em")
+    
+    @PersistenceContext(unitName="em")//(name = "em")
     private EntityManager em;
 
     public GroupMember getMember(Long id) {
@@ -36,7 +40,7 @@ public class MainServiceImpl implements MainService, Serializable {
     }
 
     @Override
-    public void saveRegistration(Registration reg) {
+    public Registration saveRegistration(Registration reg) {
         try {
             txn.begin();
             if (!em.contains(reg)) {
@@ -45,13 +49,15 @@ public class MainServiceImpl implements MainService, Serializable {
             em.persist(reg);
             em.flush();
             txn.commit();
+            return reg;
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             try {
-                txn.commit();
+                txn.rollback();
             } catch (Exception e1) {
                 e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+            throw new RuntimeException(e);
         }
     }
 

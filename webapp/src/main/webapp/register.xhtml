@@ -30,6 +30,7 @@
             </tr>
         </table>
         <h:form id="regForm">
+            <h:inputHidden value="#{regBean.meetingId}"/>
             <label for="regForm:fullName">Full Name:</label>
             <h:inputText id="fullName" value="#{regBean.registration.fullName}"/>
             <br />
