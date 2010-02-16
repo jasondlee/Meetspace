@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @Named("meetingBean")
 @SessionScoped
-public class MeetingBean extends ControllerBean implements Serializable {
+public class MeetingBean extends ControllerBean {
     public static final String NAV_ADD  = "/admin/meetings/form";
     public static final String NAV_EDIT = "/admin/meetings/form";
     public static final String NAV_LIST = "/admin/meetings/list";

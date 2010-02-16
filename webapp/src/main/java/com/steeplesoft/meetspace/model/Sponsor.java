@@ -2,17 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.steeplesoft.meetspace.model;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -20,19 +23,43 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sponsor")
-@NamedQueries({@NamedQuery(name = "Sponsor.findAll", query = "SELECT s FROM Sponsor s"), @NamedQuery(name = "Sponsor.findById", query = "SELECT s FROM Sponsor s WHERE s.id = :id"), @NamedQuery(name = "Sponsor.findByName", query = "SELECT s FROM Sponsor s WHERE s.name = :name"), @NamedQuery(name = "Sponsor.findByEmail", query = "SELECT s FROM Sponsor s WHERE s.email = :email"), @NamedQuery(name = "Sponsor.findByContactPerson", query = "SELECT s FROM Sponsor s WHERE s.contactPerson = :contactPerson")})
+@NamedQueries({
+    @NamedQuery(name = "Sponsor.findAll", query = "SELECT s FROM Sponsor s"),
+    @NamedQuery(name = "Sponsor.findById", query = "SELECT s FROM Sponsor s WHERE s.id = :id"),
+    @NamedQuery(name = "Sponsor.findByName", query = "SELECT s FROM Sponsor s WHERE s.name = :name"),
+    @NamedQuery(name = "Sponsor.findByEmail", query = "SELECT s FROM Sponsor s WHERE s.email = :email"),
+    @NamedQuery(name = "Sponsor.findByContactPerson", query = "SELECT s FROM Sponsor s WHERE s.contactPerson = :contactPerson")})
 public class Sponsor implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+
     @Column(name = "name", length = 255)
+    @NotEmpty
     private String name;
+
+    @Column
+    @NotEmpty
+    private String homePage;
+
     @Column(name = "email", length = 255)
+    @Email
     private String email;
+
     @Column(name = "contactPerson", length = 255)
+    @NotEmpty
     private String contactPerson;
+
+    @Column(name = "logoUrl")
+    private String logoUrl;
+
+    @Column()
+    private Boolean active = Boolean.TRUE;
 
     public Sponsor() {
     }
@@ -57,6 +84,14 @@ public class Sponsor implements Serializable {
         this.name = name;
     }
 
+    public String getHomePage() {
+        return homePage;
+    }
+
+    public void setHomePage(String homePage) {
+        this.homePage = homePage;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -71,6 +106,22 @@ public class Sponsor implements Serializable {
 
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -95,7 +146,6 @@ public class Sponsor implements Serializable {
 
     @Override
     public String toString() {
-        return "com.steeplesoft.meetspace.model.Sponsor[id=" + id + "]";
+        return "com.steeplesoft.meetspace.model.Sponsor[id=" + id + ", name=" + name + "]";
     }
-
 }

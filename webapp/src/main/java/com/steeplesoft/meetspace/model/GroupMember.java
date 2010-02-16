@@ -16,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -30,19 +32,26 @@ import javax.persistence.Table;
     @NamedQuery(name = "GroupMember.findByFirstName", query = "SELECT g FROM GroupMember g WHERE g.firstName = :firstName"),
     @NamedQuery(name = "GroupMember.findByLastName", query = "SELECT g FROM GroupMember g WHERE g.lastName = :lastName")})
 public class GroupMember implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "emailAddress", length = 255)
+    @Email
     private String emailAddress;
+
     @Column(name = "firstName", length = 255)
+    @NotEmpty
     private String firstName;
+
     @Column(name = "lastName", length = 255)
+    @NotEmpty
     private String lastName;
+
     @OneToMany(mappedBy = "memberId")
     private Collection<Registration> registrationCollection;
 

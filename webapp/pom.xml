@@ -12,7 +12,7 @@
     <artifactId>webapp</artifactId>
     <packaging>war</packaging>
     <version>${project.parent.version}</version>
-    <name>Meet Space</name>
+    <name>Meet Space Web App</name>
 
     <dependencies>
         <dependency>
@@ -85,7 +85,7 @@
             <scope>runtime</scope>
         </dependency>
         -->
- 
+
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>el-impl</artifactId>
@@ -137,6 +137,11 @@
             <scope>provided</scope>
         </dependency>
         -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.0.2.GA</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -158,3 +163,5 @@
         </plugins>
     </build>
 </project>
+
+

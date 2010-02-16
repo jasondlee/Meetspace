@@ -7,6 +7,7 @@ package com.steeplesoft.meetspace.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author jasonlee
@@ -26,13 +27,19 @@ public class Registration implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+
     @Column(name = "emailAddress", length = 255)
+    @NotEmpty
     private String emailAddress;
+
     @Column(name = "fullName", length = 255)
+    @NotEmpty
     private String fullName;
+
     @JoinColumn(name = "meeting_id", referencedColumnName = "id")
     @ManyToOne
     private Meeting meeting;
+    
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     @ManyToOne
     private GroupMember memberId;

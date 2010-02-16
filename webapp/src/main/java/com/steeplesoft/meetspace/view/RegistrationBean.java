@@ -9,6 +9,7 @@ import com.steeplesoft.meetspace.model.Meeting;
 import com.steeplesoft.meetspace.model.Registration;
 import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.MeetingService;
+import com.steeplesoft.meetspace.view.util.JsfUtil;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
@@ -70,6 +71,7 @@ public class RegistrationBean implements Serializable {
         if (registration == null) {
             return null;
         } else {
+            JsfUtil.addSuccessMessage(registration.getFullName() + " has been successfully registered for the meeting.");
             return "/home";
         }
     }

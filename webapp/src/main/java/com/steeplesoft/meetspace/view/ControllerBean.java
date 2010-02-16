@@ -3,13 +3,14 @@ package com.steeplesoft.meetspace.view;
 import com.steeplesoft.meetspace.service.impl.DataAccessController;
 import com.steeplesoft.meetspace.view.util.JsfUtil;
 import com.steeplesoft.meetspace.view.util.Paginator;
+import java.io.Serializable;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 
-public abstract class ControllerBean {
+public abstract class ControllerBean implements Serializable {
     public static String NAV_REDIRECT = "?faces-redirect=true";
 
     @Inject

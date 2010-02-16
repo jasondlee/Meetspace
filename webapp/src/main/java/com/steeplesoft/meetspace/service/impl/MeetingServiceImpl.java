@@ -26,7 +26,7 @@ public class MeetingServiceImpl implements MeetingService, Serializable {
     @Override
     public Meeting getUpcomingMeeting() {
         try {
-            Meeting meeting = (Meeting) em.createNamedQuery("nextMeeting").getSingleResult();
+            Meeting meeting = (Meeting) em.createNamedQuery("nextMeeting").getResultList().get(0);
             System.err.println("Meeting = " + meeting);
             return meeting;
         } catch (NoResultException nre) {
