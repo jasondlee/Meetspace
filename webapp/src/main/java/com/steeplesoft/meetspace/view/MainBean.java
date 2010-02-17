@@ -11,7 +11,8 @@ import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.PreferencesService;
 import java.io.Serializable;
 import java.util.Map;
-import javax.enterprise.context.SessionScoped;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -20,7 +21,7 @@ import javax.inject.Named;
  * @author jasonlee
  */
 @Named("main")
-@SessionScoped
+@RequestScoped
 public class MainBean implements Serializable {
     @Inject
     private PreferencesService prefsService;
@@ -30,6 +31,11 @@ public class MainBean implements Serializable {
 
     public MainBean() {
         System.out.println(this.getClass().getSimpleName() + " was constructed");
+    }
+
+    @PostConstruct
+    public void setup() {
+        sponsor = mainService.getRandomSponsor();
     }
 
     public Map<String, Preference> getPreferences() {
@@ -46,12 +52,6 @@ public class MainBean implements Serializable {
     }
 
     public Sponsor getRandomSponsor() {
-        synchronized(this) {
-            if (this.sponsor == null) {
-                sponsor = mainService.getRandomSponsor();
-            }
-        }
-
         return sponsor;
     }
 }

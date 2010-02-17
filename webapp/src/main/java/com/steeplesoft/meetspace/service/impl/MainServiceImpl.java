@@ -77,8 +77,8 @@ public class MainServiceImpl implements MainService {
         Sponsor sponsor = null;
         List<Sponsor> sponsors = em.createNamedQuery("Sponsor.activeSponsors").getResultList();
         if ((sponsors != null) && (sponsors.size() > 0)) {
-            long index = Math.round(Math.random() * (sponsors.size()-1));
-            sponsor = sponsors.get((int)index);
+            Double index = Math.floor(Math.random() * (sponsors.size()-1));
+            sponsor = sponsors.get(index.intValue());
         }
 
         return sponsor;
