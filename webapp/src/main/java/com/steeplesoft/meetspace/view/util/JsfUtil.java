@@ -5,6 +5,7 @@
 
 package com.steeplesoft.meetspace.view.util;
 
+import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -34,5 +35,15 @@ public class JsfUtil {
         } else {
             addErrorMessage(defaultMsg);
         }
+    }
+
+    public static <T> T evaluateValueExpression(String el, Class<T> c) {
+        if (!el.startsWith("#")) {
+            el = "#{" + el + "}";
+        }
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ValueExpression ve = fc.getApplication().getExpressionFactory().createValueExpression(fc.getELContext(), el, c);
+
+        return (T)ve.getValue(fc.getELContext());
     }
 }

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.steeplesoft.meetspace.view;
 
 import com.steeplesoft.meetspace.model.Meeting;
@@ -11,32 +10,35 @@ import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.MeetingService;
 import com.steeplesoft.meetspace.view.util.JsfUtil;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author jasonlee
  */
-@Named("regBean")
+@Named("registrationBean")
 @RequestScoped
 public class RegistrationBean implements Serializable {
+
     @Inject
     private MeetingService meetingService;
+
     @Inject
     private MainService mainService;
 
-    @ManagedProperty(value="#{param.meetingId}")
+    @ManagedProperty(value = "#{param.meetingId}")
     private Long meetingId;
 
     private Registration registration = new Registration();
+
     private Meeting meeting;
+    private String captchaText;
 
     public Meeting getMeeting() {
         final FacesContext facesContext = FacesContext.getCurrentInstance();
