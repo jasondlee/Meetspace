@@ -72,6 +72,7 @@ public class MainServiceImpl implements MainService {
         return em.createNamedQuery("allMembers").getResultList();
     }
 
+    @Override
     public Sponsor getRandomSponsor() {
         Sponsor sponsor = null;
         List<Sponsor> sponsors = em.createNamedQuery("Sponsor.activeSponsors").getResultList();

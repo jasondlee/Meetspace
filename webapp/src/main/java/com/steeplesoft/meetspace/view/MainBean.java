@@ -11,6 +11,7 @@ import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.PreferencesService;
 import java.io.Serializable;
 import java.util.Map;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,6 +20,7 @@ import javax.inject.Named;
  * @author jasonlee
  */
 @Named("main")
+@SessionScoped
 public class MainBean implements Serializable {
     @Inject
     private PreferencesService prefsService;
