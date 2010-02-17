@@ -7,11 +7,9 @@ package com.steeplesoft.meetspace.service.impl;
 
 import com.steeplesoft.meetspace.model.GroupMember;
 import com.steeplesoft.meetspace.model.Registration;
+import com.steeplesoft.meetspace.model.Sponsor;
 import com.steeplesoft.meetspace.service.MainService;
-import com.steeplesoft.meetspace.util.Transactional;
 
-import javax.annotation.Resource;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,7 +26,7 @@ import java.util.List;
  */
 @Named
 @SessionScoped
-public class MainServiceImpl implements MainService, Serializable {
+public class MainServiceImpl implements MainService {
     @Inject
     private UserTransaction txn;
     
@@ -72,5 +70,16 @@ public class MainServiceImpl implements MainService, Serializable {
 
     public List<GroupMember> getMembers() {
         return em.createNamedQuery("allMembers").getResultList();
+    }
+
+    public Sponsor getRandomSponsor() {
+        Sponsor sponsor = null;
+        List<Sponsor> sponsors = em.createNamedQuery("Sponsor.activeSponsors").getResultList();
+        if ((sponsors != null) && (sponsors.size() > 0)) {
+            long index = Math.round(Math.random() * (sponsors.size()-1));
+            sponsor = sponsors.get((int)index);
+        }
+
+        return sponsor;
     }
 }

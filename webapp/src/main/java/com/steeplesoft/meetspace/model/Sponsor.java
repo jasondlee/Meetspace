@@ -28,7 +28,9 @@ import org.hibernate.validator.constraints.NotEmpty;
     @NamedQuery(name = "Sponsor.findById", query = "SELECT s FROM Sponsor s WHERE s.id = :id"),
     @NamedQuery(name = "Sponsor.findByName", query = "SELECT s FROM Sponsor s WHERE s.name = :name"),
     @NamedQuery(name = "Sponsor.findByEmail", query = "SELECT s FROM Sponsor s WHERE s.email = :email"),
-    @NamedQuery(name = "Sponsor.findByContactPerson", query = "SELECT s FROM Sponsor s WHERE s.contactPerson = :contactPerson")})
+    @NamedQuery(name = "Sponsor.findByContactPerson", query = "SELECT s FROM Sponsor s WHERE s.contactPerson = :contactPerson"),
+    @NamedQuery(name = "Sponsor.activeSponsors", query = "SELECT s FROM Sponsor s WHERE s.active = true")
+})
 public class Sponsor implements Serializable {
 
     private static final long serialVersionUID = 1L;
