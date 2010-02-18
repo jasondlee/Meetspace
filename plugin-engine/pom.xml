@@ -12,7 +12,7 @@
     <artifactId>plugin-engine</artifactId>
     <packaging>jar</packaging>
     <version>${project.parent.version}</version>
-    <name>Meet Space Plugin Engine</name>
+    <name>Meetspace Plugin Engine</name>
 
     <dependencies>
         <!-- PROVIDED deps -->
@@ -71,3 +71,4 @@
         </dependency>
     </dependencies>
 </project>
+
