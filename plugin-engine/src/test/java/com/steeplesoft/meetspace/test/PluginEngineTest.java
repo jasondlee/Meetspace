@@ -1,6 +1,6 @@
 package com.steeplesoft.meetspace.test;
 
-import com.steeplesoft.meetspace.plugins.PluginEngine;
+import com.steeplesoft.meetspace.plugins.engine.ClassloaderPluginEngine;
 import com.steeplesoft.meetspace.plugins.PluginMetadata;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,13 +12,13 @@ import java.util.TreeSet;
 import static org.junit.Assert.*;
 
 public class PluginEngineTest {
-    private static PluginEngine pe;
+    private static ClassloaderPluginEngine pe;
 
     @BeforeClass
     public static void before() {
         Set<String> packages = new TreeSet<String>();
         packages.add("com.steeplesoft.meetspace.test");
-        pe = new PluginEngine(".", packages);
+        pe = new ClassloaderPluginEngine(".", packages);
     }
 
     @Test

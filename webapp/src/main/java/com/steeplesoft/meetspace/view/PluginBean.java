@@ -1,7 +1,7 @@
 package com.steeplesoft.meetspace.view;
 
-import com.steeplesoft.meetspace.plugins.JsfPluginEngine;
-import com.steeplesoft.meetspace.plugins.PluginEngine;
+import com.steeplesoft.meetspace.plugins.engine.JsfPluginEngine;
+import com.steeplesoft.meetspace.plugins.engine.ClassloaderPluginEngine;
 import com.steeplesoft.meetspace.plugins.PluginMetadata;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -12,7 +12,7 @@ import java.util.List;
 @Named
 @ApplicationScoped
 public class PluginBean {
-    private PluginEngine pe;
+    private ClassloaderPluginEngine pe;
 
     public PluginBean() {
         String home = System.getenv("MEETSPACE_HOME");

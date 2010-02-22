@@ -1,4 +1,4 @@
-package com.steeplesoft.meetspace.plugins;
+package com.steeplesoft.meetspace.plugins.engine;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
@@ -14,7 +14,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class JsfPluginEngine extends PluginEngine {
+public class JsfPluginEngine extends ClassloaderPluginEngine {
     private static final Class<?>[] SCOPES = {
             RequestScoped.class,
             SessionScoped.class,

@@ -36,8 +36,9 @@
     </repositories>
 
     <modules>
-        <module>webapp</module>
+        <module>plugin-api</module>
         <module>plugin-engine</module>
+        <module>webapp</module>
     </modules>
 
     <properties>

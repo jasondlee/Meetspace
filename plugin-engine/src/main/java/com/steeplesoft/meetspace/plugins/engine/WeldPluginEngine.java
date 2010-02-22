@@ -1,4 +1,4 @@
-package com.steeplesoft.meetspace.plugins;
+package com.steeplesoft.meetspace.plugins.engine;
 
 import java.util.Set;
 
@@ -9,7 +9,7 @@ import java.util.Set;
  * Time: 10:46:21 PM
  * To change this template use File | Settings | File Templates.
  */
-public class WeldPluginEngine extends PluginEngine {
+public class WeldPluginEngine extends ClassloaderPluginEngine {
     public WeldPluginEngine(String pluginDir) {
         super(pluginDir);
     }

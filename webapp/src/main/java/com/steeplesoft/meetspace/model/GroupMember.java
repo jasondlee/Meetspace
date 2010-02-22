@@ -55,6 +55,9 @@ public class GroupMember implements Serializable {
     @OneToMany(mappedBy = "memberId")
     private Collection<Registration> registrationCollection;
 
+    private Boolean canPost;
+    private Boolean isAdmin;
+
     public GroupMember() {
     }
 

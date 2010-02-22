@@ -1,5 +1,7 @@
-package com.steeplesoft.meetspace.plugins;
+package com.steeplesoft.meetspace.plugins.engine;
 
+import com.steeplesoft.meetspace.plugins.Plugin;
+import com.steeplesoft.meetspace.plugins.PluginMetadata;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -10,18 +12,18 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class PluginEngine {
+public class ClassloaderPluginEngine {
     protected String pluginDir;
     protected Set<String> packages;
     protected static final Class[] parameters = new Class[]{URL.class};
     protected Map<String, List<Class<?>>> pluginClasses = new HashMap<String, List<Class<?>>>();
     protected Map<String, List<Object>> pluginInstances = new HashMap<String, List<Object>>();
 
-    public PluginEngine(String pluginDir) {
+    public ClassloaderPluginEngine(String pluginDir) {
         this(pluginDir, (Set<String>) null);
     }
 
-    public PluginEngine(String pluginDir, String pkg) {
+    public ClassloaderPluginEngine(String pluginDir, String pkg) {
         this.pluginDir = pluginDir;
         this.packages = new TreeSet<String>();
         packages.add(pkg);
@@ -29,7 +31,7 @@ public class PluginEngine {
         scanForPlugins();
     }
 
-    public PluginEngine(String pluginDir, Set<String> packages) {
+    public ClassloaderPluginEngine(String pluginDir, Set<String> packages) {
         this.pluginDir = pluginDir;
         this.packages = packages;
 

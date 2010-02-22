@@ -1,8 +1,8 @@
 package com.steeplesoft.meetspace.test;
 
 import com.steeplesoft.jsf.facestester.FacesTester;
-import com.steeplesoft.meetspace.plugins.JsfPluginEngine;
-import com.steeplesoft.meetspace.plugins.PluginEngine;
+import com.steeplesoft.meetspace.plugins.engine.JsfPluginEngine;
+import com.steeplesoft.meetspace.plugins.engine.ClassloaderPluginEngine;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class JsfPluginEngineTest  {
     private static FacesTester ft;
-    private static PluginEngine pe;
+    private static ClassloaderPluginEngine pe;
 
     @BeforeClass
     public static void setup() {
