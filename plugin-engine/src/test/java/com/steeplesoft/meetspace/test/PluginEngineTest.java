@@ -5,6 +5,7 @@ import com.steeplesoft.meetspace.plugins.PluginMetadata;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -15,10 +16,10 @@ public class PluginEngineTest {
     private static ClassloaderPluginEngine pe;
 
     @BeforeClass
-    public static void before() {
+    public static void before() throws IOException {
         Set<String> packages = new TreeSet<String>();
         packages.add("com.steeplesoft.meetspace.test");
-        pe = new ClassloaderPluginEngine(".", packages);
+        pe = new ClassloaderPluginEngine("/Users/jasonlee/src/jug/meetspace/plugin-engine/target/plugins", packages);
     }
 
     @Test

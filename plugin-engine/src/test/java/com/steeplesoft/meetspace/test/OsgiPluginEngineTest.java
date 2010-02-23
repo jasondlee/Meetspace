@@ -17,7 +17,10 @@ import org.junit.Test;
 public class OsgiPluginEngineTest {
     @Test
     public void testOsgiPluingEngine() throws IOException {
-        OsgiPluginEngine engine = new OsgiPluginEngine("/Users/jasonlee/src/glassfish/test/glassfishv3/glassfish/modules");
+        // This has to be run from Maven right now (or manually set up. See pom.xml)
+        OsgiPluginEngine engine = new OsgiPluginEngine(
+//                "/Users/jasonlee/src/glassfish/test/glassfishv3/glassfish/modules");
+                "plugin-engine/target/plugins");
         Assert.assertNotNull(engine);
     }
 }

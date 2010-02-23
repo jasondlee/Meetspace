@@ -15,6 +15,21 @@
     <name>Meetspace Plugin Engine</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.main</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!-- PROVIDED deps -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -31,20 +46,16 @@
             <artifactId>jsf-impl</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!-- RUNTIME deps -->
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>el-impl</artifactId>
@@ -64,6 +75,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.steeplesoft.jsf.facestester</groupId>
             <artifactId>facestester-connector-mojarra-jsf2.0</artifactId>
             <scope>test</scope>
@@ -75,15 +92,60 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.framework</artifactId>
-            <version>2.0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.main</artifactId>
-            <version>2.0.4</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>helloworld-plugin</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
-</project>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build_plugin_dir</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.plugin.classpath" />
+                                <if>
+                                    <isset property="${env.M2_HOME}" />
+                                    <then>
+                                        <property name="m2.home" value="${env.HOME}/.m2" />
+                                    </then>
+                                    <else>
+                                        <property name="m2.home" value="${env.M2_HOME}" />
+                                    </else>
+                                </if>
+
+                                <mkdir dir="target/plugins/helloworld-plugin"/>
+                                <copy file="${m2.home}/repository/commons-lang/commons-lang/2.4/commons-lang-2.4.jar"
+                                todir="target/plugins/helloworld-plugin"/>
+                                <copy file="${m2.home}/repository/com/steeplesoft/meetspace/plugins/helloworld-plugin/${project.version}/helloworld-plugin-${project.version}.jar"
+                                      todir="target/plugins"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant</artifactId>
+                        <version>1.7.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>

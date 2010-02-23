@@ -8,9 +8,9 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.steeplesoft.meetspace</groupId>
+    <groupId>com.steeplesoft.meetspace.plugins</groupId>
     <artifactId>plugin-api</artifactId>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <version>${project.parent.version}</version>
     <name>Meetspace Plugin API</name>
 
@@ -36,5 +36,21 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package>com.steeplesoft.meetspace.plugins</Export-Package>
+                        <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+                        <!--<Import-Package>com.steeplesoft.meetspace.plugins</Import-Package>-->
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 

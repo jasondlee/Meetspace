@@ -7,9 +7,8 @@ package com.steeplesoft.meetspace.plugins.engine;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.util.*;
 import java.util.logging.Logger;
 import org.apache.felix.framework.Felix;
 import org.apache.felix.framework.util.FelixConstants;
@@ -21,6 +20,15 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.util.tracker.BundleTracker;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.component.FacesComponent;
+import javax.faces.component.behavior.FacesBehavior;
+import javax.faces.convert.FacesConverter;
+import javax.faces.event.NamedEvent;
+import javax.faces.render.FacesBehaviorRenderer;
+import javax.faces.render.FacesRenderer;
+import javax.faces.validator.FacesValidator;
+
 /**
  *
  * @author jasonlee
@@ -29,6 +37,35 @@ public class OsgiPluginEngine implements BundleActivator {
     private String bundleDir;
     private BundleTracker bundleTracker;
     private final static Logger logger = Logger.getLogger(OsgiPluginEngine.class.getName());
+
+    private static final Set<String> FACES_ANNOTATIONS;
+    private static final Set<Class<? extends Annotation>> FACES_ANNOTATION_TYPE;
+
+    static {
+        HashSet<String> annotations = new HashSet<String>(8, 1.0f);
+        Collections.addAll(annotations,
+                           "Ljavax/faces/component/FacesComponent;",
+                           "Ljavax/faces/convert/FacesConverter;",
+                           "Ljavax/faces/validator/FacesValidator;",
+                           "Ljavax/faces/render/FacesRenderer;",
+                           "Ljavax/faces/bean/ManagedBean;",
+                           "Ljavax/faces/event/NamedEvent;",
+                           "Ljavax/faces/component/behavior/FacesBehavior;",
+                           "Ljavax/faces/render/FacesBehaviorRenderer;");
+        FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
+        HashSet<Class<? extends Annotation>> annotationInstances =
+              new HashSet<Class<? extends Annotation>>(8, 1.0f);
+        Collections.addAll(annotationInstances,
+                           FacesComponent.class,
+                           FacesConverter.class,
+                           FacesValidator.class,
+                           FacesRenderer.class,
+                           ManagedBean.class,
+                           NamedEvent.class,
+                           FacesBehavior.class,
+                           FacesBehaviorRenderer.class);
+        FACES_ANNOTATION_TYPE = Collections.unmodifiableSet(annotationInstances);
+    }
 
     public OsgiPluginEngine(String bundleDir) throws IOException {
         this.bundleDir = bundleDir;
@@ -69,7 +106,7 @@ public class OsgiPluginEngine implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        bundleTracker = new BundleTracker(context, Bundle.ACTIVE | Bundle.INSTALLED, new MeetspaceBundleTracker());
+        bundleTracker = new BundleTracker(context, Bundle.INSTALLED, new MeetspaceBundleTracker());
         bundleTracker.open();
     }
 
