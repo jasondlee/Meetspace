@@ -38,7 +38,7 @@
 
     <modules>
         <module>plugin-api</module>
-        <module>helloWorld-plugin</module>
+        <module>helloworld-plugin</module>
         <module>plugin-engine</module>
         <module>webapp</module>
     </modules>
