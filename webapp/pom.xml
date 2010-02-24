@@ -16,7 +16,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>${project.groupId}.plugins</groupId>
             <artifactId>plugin-engine</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>

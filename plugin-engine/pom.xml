@@ -8,7 +8,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.steeplesoft.meetspace</groupId>
+    <groupId>com.steeplesoft.meetspace.plugins</groupId>
     <artifactId>plugin-engine</artifactId>
     <packaging>jar</packaging>
     <version>${project.parent.version}</version>
