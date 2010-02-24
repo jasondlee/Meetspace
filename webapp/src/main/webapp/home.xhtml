@@ -27,13 +27,17 @@
                 <td>Date:</td>
                 <td>
                     <h:outputText value="#{meetingBean.nextMeeting.startDate}">
-                        <f:convertDateTime type="date" dateStyle="medium"/>
+                        <f:convertDateTime type="date" dateStyle="full"/>
                     </h:outputText>
                 </td>
             </tr>
             <tr>
+                <td>Location:</td>
+                <td>#{meetingBean.nextMeeting.address} (#{meetingBean.nextMeeting.moreInfo})</td>
+            </tr>
+            <tr>
                 <td>Description:</td>
-                <td>#{meetingBean.nextMeeting.description}</td>
+                <td><h:outputText value="#{meetingBean.nextMeeting.description}" escape="false"/></td>
             </tr>
         </table>
     </ui:define>

@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 public class PluginBeanTest {
     private static PluginBean pb;
     @BeforeClass
-    public static void setup() {
+    public static void setup() throws IOException {
         pb = new PluginBean();
     }
 

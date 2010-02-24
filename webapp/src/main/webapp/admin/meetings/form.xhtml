@@ -3,6 +3,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:sc="http://java.sun.com/mojarra/scales"
                 template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="content">
         <h:form id="meetingForm">
@@ -21,17 +22,17 @@
 
                 <h:outputLabel value="Start Date" for="startDate"/>
                 <h:panelGroup>
-                    <h:inputText id="startDate" value="#{meetingBean.selected.startDate}" title="Start Date">
-                        <f:convertDateTime pattern="yyyy-MM-dd"/>
-                    </h:inputText>
+                    <sc:dateSelector id="startDate" value="#{meetingBean.selected.startDate}" title="Start Date">
+                        <f:convertDateTime pattern="yyyy/MM/dd"/>
+                    </sc:dateSelector>
                     <h:message for="startDate"/>
                 </h:panelGroup>
 
                 <h:outputLabel value="End Date" for="endDate"/>
                 <h:panelGroup>
-                    <h:inputText id="endDate" value="#{meetingBean.selected.endDate}" title="End Date">
-                        <f:convertDateTime pattern="yyyy-MM-dd"/>
-                    </h:inputText>
+                    <sc:dateSelector id="endDate" value="#{meetingBean.selected.endDate}" title="End Date">
+                        <f:convertDateTime pattern="yyyy/MM/dd"/>
+                    </sc:dateSelector>
                     <h:message for="endDate"/>
                 </h:panelGroup>
 
@@ -53,10 +54,21 @@
 
                 <h:outputLabel value="Description" for="description"/>
                 <h:panelGroup>
-                    <h:inputTextarea id="description" value="#{meetingBean.selected.description}" title="Description"/>
+                    <sc:htmlEditor id="description" value="#{meetingBean.selected.description}" title="Description"/>
                     <h:message for="description"/>
                 </h:panelGroup>
 
+                <h:outputLabel value="Location" for="location"/>
+                <h:panelGroup>
+                    <h:inputText id="location" value="#{meetingBean.selected.address}" title="Location"/>
+                    <h:message for="location"/>
+                </h:panelGroup>
+
+                <h:outputLabel value="More Info" for="moreInfo"/>
+                <h:panelGroup>
+                    <h:inputText id="moreInfo" value="#{meetingBean.selected.moreInfo}" title="More Info"/>
+                    <h:message for="moreInfo"/>
+                </h:panelGroup>
             </h:panelGrid>
             <h:commandButton action="#{meetingBean.create}" value="Add" rendered="#{empty meetingBean.selected.id}"/>
             <h:commandButton action="#{meetingBean.edit}" value="Update" rendered="#{!empty meetingBean.selected.id}"/>

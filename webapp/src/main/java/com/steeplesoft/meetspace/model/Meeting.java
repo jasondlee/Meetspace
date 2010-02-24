@@ -60,6 +60,12 @@ public class Meeting implements Serializable {
     @Column(name = "startTime")
     @Temporal(TemporalType.TIME)
     private Date startTime;
+
+    @Column
+    private String address;
+
+    @Column
+    private String moreInfo;
     
     @OneToMany(mappedBy = "meeting")
     private Collection<Registration> registrations;
@@ -133,6 +139,22 @@ public class Meeting implements Serializable {
 
     public void setRegistrations(Collection<Registration> registrations) {
         this.registrations = registrations;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getMoreInfo() {
+        return moreInfo;
+    }
+
+    public void setMoreInfo(String moreInfo) {
+        this.moreInfo = moreInfo;
     }
 
     @Override
