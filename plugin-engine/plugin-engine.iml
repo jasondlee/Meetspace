@@ -35,7 +35,7 @@
     <orderEntry type="library" exported="" name="Maven: org.apache.felix:org.apache.felix.shell.tui:1.4.1" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.apache.felix:org.apache.felix.bundlerepository:1.4.3" level="project" />
     <orderEntry type="library" exported="" name="Maven: javassist:javassist:3.11.0.GA" level="project" />
-    <orderEntry type="library" exported="" name="Maven: com.steeplesoft.meetspace:plugin-api:0.1-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="plugin-api" exported="" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.faces:jsf-api:2.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.faces:jsf-impl:2.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
@@ -50,7 +50,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.steeplesoft.jsf.facestester:facestester-core:0.4-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.el:el-api:2.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.steeplesoft.meetspace:helloworld-plugin:0.1-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="helloworld-plugin" scope="PROVIDED" />
   </component>
   <component name="POM File Configuration" pomFile="" />
 </module>

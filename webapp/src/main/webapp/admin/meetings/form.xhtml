@@ -14,10 +14,22 @@
             <h:commandLink action="#{meetingBean.prepareList}" value="Member List" immediate="true"/>
 
             <h:panelGrid columns="2">
-                <h:outputLabel value="Meeting Name" for="name"/>
+                <h:outputLabel value="Meeting&#160;Name" for="name"/>
                 <h:panelGroup>
                     <h:inputText id="name" value="#{meetingBean.selected.name}" title="Name"/>
                     <h:message for="name"/>
+                </h:panelGroup>
+                
+                <h:outputLabel value="Topic" for="topic"/>
+                <h:panelGroup>
+                    <h:inputText id="topic" value="#{meetingBean.selected.topic}" title="Topic"/>
+                    <h:message for="topic"/>
+                </h:panelGroup>
+
+                <h:outputLabel value="Speaker" for="speaker"/>
+                <h:panelGroup>
+                    <h:inputText id="speaker" value="#{meetingBean.selected.speaker}" title="Speaker"/>
+                    <h:message for="speaker"/>
                 </h:panelGroup>
 
                 <h:outputLabel value="Start Date" for="startDate"/>

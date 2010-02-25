@@ -38,8 +38,14 @@ public class Meeting implements Serializable {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "description", length = 255)
+    @Column(name = "description", length = 32864) // Just some really large, mostly "random" number
     private String description;
+
+    @Column
+    private String topic;
+
+    @Column
+    private String speaker;
 
     @Column(name = "endDate")
     @Temporal(TemporalType.DATE)
@@ -155,6 +161,22 @@ public class Meeting implements Serializable {
 
     public void setMoreInfo(String moreInfo) {
         this.moreInfo = moreInfo;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public String getSpeaker() {
+        return speaker;
+    }
+
+    public void setSpeaker(String speaker) {
+        this.speaker = speaker;
     }
 
     @Override

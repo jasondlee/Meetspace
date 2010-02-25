@@ -62,4 +62,10 @@ public class MeetingBean extends ControllerBean {
     public Class getEntityClass() {
         return Meeting.class;
     }
+
+    @Override
+    public String edit() {
+        nextMeeting = null;
+        return super.edit();
+    }
 }
