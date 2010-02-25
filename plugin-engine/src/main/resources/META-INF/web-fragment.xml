@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment>
+    <context-param>
+        <param-name>javax.faces.FACELETS_RESOURCE_RESOLVER</param-name>
+        <param-value>com.steeplesoft.meetspace.plugins.jsf.MeetspaceResourceResolver</param-value>
+    </context-param>
+</web-fragment>
