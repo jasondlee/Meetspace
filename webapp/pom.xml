@@ -15,6 +15,13 @@
     <name>Meetspace Web App</name>
 
     <dependencies>
+        <!-- Not sure yet... 
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>3.0.2.RELEASE</version>
+        </dependency>
+        -->
         <dependency>
             <groupId>${project.groupId}.plugins</groupId>
             <artifactId>plugin-engine</artifactId>
@@ -25,12 +32,12 @@
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-api</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-impl</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>

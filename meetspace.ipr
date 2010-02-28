@@ -63,6 +63,8 @@
             <element id="archive" name="plugin-api-0.1-SNAPSHOT.jar">
               <element id="module-output" name="plugin-api" />
             </element>
+            <element id="library" level="project" name="Maven: com.sun.faces:jsf-api:2.0.2" />
+            <element id="library" level="project" name="Maven: com.sun.faces:jsf-impl:2.0.2" />
             <element id="library" level="project" name="Maven: com.sun.mojarra:mojarra-scales:2.0.0-SNAPSHOT" />
             <element id="library" level="project" name="Maven: com.octo.captcha:jcaptcha:2.0-alpha-1" />
             <element id="library" level="project" name="Maven: com.octo.captcha:jcaptcha-api:2.0-alpha-1" />
