@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+      template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam id="model" name="model" value="#{autoAdminListBean.modelClassName}"
+                         required="true"
+                         requiredMessage="You did not specify a model class. (The model parameter is missing)"
+                         validatorMessage="Invalid model class. (The model parameter is too short to be a class name)">
+                <f:validateLength minimum="1"/>
+            </f:viewParam>
+        </f:metadata>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="autoAdminListForm">
+            <h:commandLink action="#{autoAdminFormBean.prepareCreate}" value="Add"/>
+            
+
+            <h:dataTable binding="#{autoAdminListBean.dataTable}"/>
+
+            <div id="tableNav">
+                <div id="prevdiv" style="float: left;">
+                    <h:commandLink id="prevLink" action="#{autoAdminTableBean.previous}" value="Previous #{autoAdminTableBean.paginator.pageSize}" rendered="#{autoAdminTableBean.paginator.hasPreviousPage}">
+                        <f:ajax execute="@this" render="@form"/>
+                    </h:commandLink>&#160;
+                </div>
+                <div id="countdiv" style="text-align: center; float: left;">
+                    <h:outputText value="#{autoAdminTableBean.paginator.pageFirstItem + 1} to #{autoAdminTableBean.paginator.pageLastItem + 1} of #{autoAdminTableBean.paginator.itemsCount}"/>
+                    (
+                    <h:selectOneMenu id="rowsPerPage" value="#{autoAdminTableBean.rowsPerPage}"
+                                     valueChangeListener="#{meeting.resetPagination}"
+                                     onchange1="jsf.ajax.request(this, event, {execute: 'autoAdminListForm:rowsPerPage', render: 'autoAdminListForm'}); return false;">
+                                     <f:ajax execute="@this" render="@form"/>
+                        <f:selectItem itemValue="5" />
+                        <f:selectItem itemValue="10" />
+                        <f:selectItem itemValue="15" />
+                    </h:selectOneMenu>
+                    ) per page
+                </div>
+                <div id="nextdiv" style="text-align: right; float: left;">
+                    &#160;
+                    <h:commandLink id="nextLink" action="#{autoAdminTableBean.next}" value="Next #{autoAdminTableBean.paginator.pageSize}" rendered="#{autoAdminTableBean.paginator.hasNextPage}">
+                        <f:ajax execute="@this" render="@form"/>
+                    </h:commandLink>
+                </div>
+                <script type="text/javascript">
+                    var width = document.getElementById("autoAdminListForm:meetingTable").clientWidth;
+                    document.getElementById("prevdiv").style.width = (width/4)+"px";
+                    document.getElementById("countdiv").style.width = (width/2)+"px";
+                    document.getElementById("nextdiv").style.width = (width/4)+"px";
+                </script>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

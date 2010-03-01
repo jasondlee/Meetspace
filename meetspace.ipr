@@ -160,10 +160,11 @@
     </autodetection-disabled>
   </component>
   <component name="HudsonMonitorComponent">
-    <option name="password" value="" />
+    <option name="authenticationRequired" value="true" />
+    <option name="password" value="amc442" />
     <option name="serverAddress" value="hudson.steeplesoft.com" />
     <option name="timeOutTextField" value="" />
-    <option name="username" value="" />
+    <option name="username" value="jason" />
     <option name="viewName" value="" />
   </component>
   <component name="IdProvider" IDEtalkID="93160F7709D281B423367953A0F920C6" />

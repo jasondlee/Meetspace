@@ -9,7 +9,7 @@
     <title>Should Not Be Displayed</title>
 </head>
 <body>   <!-- template="/WEB-INF/demotemplate.xhtml" -->
-<ui:composition id="composition" template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
+<ui:composition template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="title">Meetspace Auto Admin</ui:define>
     <ui:define name="content">
         <h:messages layout="table"/>

@@ -20,14 +20,13 @@ import javax.validation.constraints.Size;
 @Table(name = "meeting")
 @NamedQueries({
     @NamedQuery(name="getMeeting", query="SELECT m FROM Meeting m WHERE m.id = :meetingId"),
-    @NamedQuery(name="nextMeeting", query="SELECT m FROM Meeting m WHERE m.startDate >= CURRENT_DATE"),
+    @NamedQuery(name="nextMeeting", query="SELECT m FROM Meeting m WHERE m.meetingDate >= CURRENT_DATE"),
     @NamedQuery(name = "Meeting.findAll", query = "SELECT m FROM Meeting m"),
     @NamedQuery(name = "Meeting.findById", query = "SELECT m FROM Meeting m WHERE m.id = :id"),
     @NamedQuery(name = "Meeting.findByDescription", query = "SELECT m FROM Meeting m WHERE m.description = :description"),
-    @NamedQuery(name = "Meeting.findByEndDate", query = "SELECT m FROM Meeting m WHERE m.endDate = :endDate"),
     @NamedQuery(name = "Meeting.findByEndTime", query = "SELECT m FROM Meeting m WHERE m.endTime = :endTime"),
     @NamedQuery(name = "Meeting.findByName", query = "SELECT m FROM Meeting m WHERE m.name = :name"),
-    @NamedQuery(name = "Meeting.findByStartDate", query = "SELECT m FROM Meeting m WHERE m.startDate = :startDate"),
+    @NamedQuery(name = "Meeting.findByMeetingDate", query = "SELECT m FROM Meeting m WHERE m.meetingDate = :meetingDate"),
     @NamedQuery(name = "Meeting.findByStartTime", query = "SELECT m FROM Meeting m WHERE m.startTime = :startTime")})
 public class Meeting implements Serializable {
 
@@ -38,6 +37,10 @@ public class Meeting implements Serializable {
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @Column(name = "name", length = 255)
+    @NotNull @Size(min=1, max=255)
+    private String name;
+
     @Column(name = "description", length = 32864) // Just some really large, mostly "random" number
     private String description;
 
@@ -47,25 +50,17 @@ public class Meeting implements Serializable {
     @Column
     private String speaker;
 
-    @Column(name = "endDate")
+    @Column(name = "meetingDate")
     @Temporal(TemporalType.DATE)
-    private Date endDate;
-
-    @Column(name = "endTime")
-    @Temporal(TemporalType.TIME)
-    private Date endTime;
-
-    @Column(name = "name", length = 255)
-    @NotNull @Size(min=1, max=255)
-    private String name;
-
-    @Column(name = "startDate")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private Date meetingDate;
 
     @Column(name = "startTime")
     @Temporal(TemporalType.TIME)
     private Date startTime;
+
+    @Column(name = "endTime")
+    @Temporal(TemporalType.TIME)
+    private Date endTime;
 
     @Column
     private String address;
@@ -99,14 +94,6 @@ public class Meeting implements Serializable {
         this.description = description;
     }
 
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
     public Date getEndTime() {
         return endTime;
     }
@@ -123,12 +110,12 @@ public class Meeting implements Serializable {
         this.name = name;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getMeetingDate() {
+        return meetingDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setMeetingDate(Date meetingDate) {
+        this.meetingDate = meetingDate;
     }
 
     public Date getStartTime() {

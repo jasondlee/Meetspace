@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<head>
+    <title>Should Not Be Displayed</title>
+</head>
+<body>   <!-- template="/WEB-INF/demotemplate.xhtml" -->
+<ui:composition id="composition" template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam id="model" name="model" value="#{autoAdminFormBean.modelClassName}"
+                         required="true"
+                         requiredMessage="You did not specify a model class. (The model parameter is missing)"
+                         validatorMessage="Invalid model class. (The model parameter is too short to be a class name)">
+                <f:validateLength minimum="1"/>
+            </f:viewParam>
+        </f:metadata>
+    </ui:define>
+    <ui:define name="title">Meetspace Auto Admin</ui:define>
+    <ui:define name="content">
+        <h:messages layout="table"/>
+
+        <h1>Meetspace Auto Admin - #{autoAdminFormBean.modelClassName}</h1>
+        <h:form id="autoAdminForm">
+            <h:inputHidden value="#{autoAdminFormBean.modelClassName}"/>d
+            <h:panelGrid id="autoAdminGrid" binding="#{autoAdminFormBean.panelGrid}"/>
+            <br/>
+            <h:commandButton action="#{autoAdminFormBean.create}" value="Add" rendered="#{empty autoAdminFormBean.selected.id}"/>
+            <h:commandButton action="#{autoAdminFormBean.edit}" value="Update" rendered="#{!empty autoAdminFormBean.selected.id}"/>
+            <h:commandButton action="list" value="Cancel"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</body>
+</html>
