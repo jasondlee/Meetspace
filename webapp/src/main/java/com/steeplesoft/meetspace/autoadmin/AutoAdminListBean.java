@@ -24,7 +24,7 @@ public class AutoAdminListBean extends AutoAdminBaseBean {
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
     private final Application application = facesContext.getApplication();
     private final ELContext elContext = facesContext.getELContext();
-    public UIComponent getDataTable() {
+    public UIComponent getDataTable() throws IllegalAccessException, InstantiationException {
         if (table == null) {
             table = (HtmlDataTable) application.createComponent(HtmlDataTable.COMPONENT_TYPE);
 //            table.setValueExpression("#{autoAdmin.list};" +

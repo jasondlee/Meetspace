@@ -55,7 +55,10 @@ public class GroupMember implements Serializable {
     @OneToMany(mappedBy = "memberId")
     private Collection<Registration> registrationCollection;
 
+    @Column
     private Boolean canPost;
+
+    @Column
     private Boolean isAdmin;
 
     public GroupMember() {
@@ -95,6 +98,22 @@ public class GroupMember implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Boolean getCanPost() {
+        return canPost;
+    }
+
+    public void setCanPost(Boolean canPost) {
+        this.canPost = canPost;
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean admin) {
+        isAdmin = admin;
     }
 
     public Collection<Registration> getRegistrationCollection() {

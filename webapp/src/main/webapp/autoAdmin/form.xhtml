@@ -45,6 +45,11 @@
                     <h:inputText value="#{autoAdminFormBean.model[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIMESTAMP')}" size="19" maxlength="18">
                         <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm"/>
                     </h:inputText>
+                    <h:selectOneListbox value="#{autoAdminFormBean.model[cmd.name]}" rendered="#{cmd.type.simpleName == 'Boolean'}" size="1">
+                        <f:selectItem itemValue="" itemLabel=""/>
+                        <f:selectItem itemValue="true" itemLabel="True"/>
+                        <f:selectItem itemValue="false" itemLabel="False"/>
+                    </h:selectOneListbox>
                 </ui:fragment>
                 <br/>
             </ui:repeat>

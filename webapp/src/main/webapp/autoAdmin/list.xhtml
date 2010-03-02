@@ -16,20 +16,20 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="autoAdminListForm">
-            <h:commandLink action="#{autoAdminFormBean.prepareCreate}" value="Add"/>
+            <h:outputLink value="form.jsf?model=#{autoAdminListBean.modelClassName}">Add</h:outputLink>
             
             <h:dataTable binding="#{autoAdminListBean.dataTable}"/>
 
             <div id="tableNav">
                 <div id="prevdiv" style="float: left;">
-                    <h:commandLink id="prevLink" action="#{autoAdminTableBean.previous}" value="Previous #{autoAdminTableBean.paginator.pageSize}" rendered="#{autoAdminTableBean.paginator.hasPreviousPage}">
+                    <h:commandLink id="prevLink" action="#{autoAdminListBean.previous}" value="Previous #{autoAdminListBean.paginator.pageSize}" rendered="#{autoAdminListBean.paginator.hasPreviousPage}">
                         <f:ajax execute="@this" render="@form"/>
                     </h:commandLink>&#160;
                 </div>
                 <div id="countdiv" style="text-align: center; float: left;">
-                    <h:outputText value="#{autoAdminTableBean.paginator.pageFirstItem + 1} to #{autoAdminTableBean.paginator.pageLastItem + 1} of #{autoAdminTableBean.paginator.itemsCount}"/>
+                    <h:outputText value="#{autoAdminListBean.paginator.pageFirstItem + 1} to #{autoAdminListBean.paginator.pageLastItem + 1} of #{autoAdminListBean.paginator.itemsCount}"/>
                     (
-                    <h:selectOneMenu id="rowsPerPage" value="#{autoAdminTableBean.rowsPerPage}"
+                    <h:selectOneMenu id="rowsPerPage" value="#{autoAdminListBean.rowsPerPage}"
                                      valueChangeListener="#{meeting.resetPagination}"
                                      onchange1="jsf.ajax.request(this, event, {execute: 'autoAdminListForm:rowsPerPage', render: 'autoAdminListForm'}); return false;">
                                      <f:ajax execute="@this" render="@form"/>
@@ -41,7 +41,7 @@
                 </div>
                 <div id="nextdiv" style="text-align: right; float: left;">
                     &#160;
-                    <h:commandLink id="nextLink" action="#{autoAdminTableBean.next}" value="Next #{autoAdminTableBean.paginator.pageSize}" rendered="#{autoAdminTableBean.paginator.hasNextPage}">
+                    <h:commandLink id="nextLink" action="#{autoAdminListBean.next}" value="Next #{autoAdminListBean.paginator.pageSize}" rendered="#{autoAdminListBean.paginator.hasNextPage}">
                         <f:ajax execute="@this" render="@form"/>
                     </h:commandLink>
                 </div>
