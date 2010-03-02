@@ -35,8 +35,8 @@ public class ColumnMetadata {
         return length;
     }
 
-    public TemporalType getTemporalType() {
-        return temporalType;
+    public String getTemporalType() {
+        return temporalType.name();
     }
 
     public void setTemporalType(TemporalType temporalType) {

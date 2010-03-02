@@ -174,6 +174,10 @@ public abstract class ControllerBean implements Serializable {
         return current;
     }
 
+    public void setSelected(Object selected) {
+        this.current = selected;
+    }
+
     protected Object newEntityInstance() {
         Object obj = null;
         try {

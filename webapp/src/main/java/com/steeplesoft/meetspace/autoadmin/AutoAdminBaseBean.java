@@ -2,17 +2,9 @@ package com.steeplesoft.meetspace.autoadmin;
 
 import com.steeplesoft.meetspace.view.ControllerBean;
 
-import javax.faces.application.Application;
-import javax.faces.component.html.HtmlOutputText;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jasonlee
- * Date: Feb 28, 2010
- * Time: 10:38:49 PM
- * To change this template use File | Settings | File Templates.
- */
 public abstract class AutoAdminBaseBean extends ControllerBean {
     @Inject
     private AutoAdminBean adminBean;
@@ -20,10 +12,11 @@ public abstract class AutoAdminBaseBean extends ControllerBean {
     private Object model;
 
     private String modelClassName;
+    private Class<?> modelClass;
 
     @Override
     public Class getEntityClass() {
-        return model.getClass();
+        return getModel().getClass();
     }
 
     @Override
@@ -47,18 +40,22 @@ public abstract class AutoAdminBaseBean extends ControllerBean {
     }
 
     public String getModelClassName() {
+        if (modelClassName == null) {
+            modelClassName = (String)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("modelClassName");
+        }
         return modelClassName;
     }
 
-    public void setModelClassName(String modelClassName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        final Class<?> clazz = adminBean.getModelClass(modelClassName);
+    public void setModelClassName(String modelClassName) {
         this.modelClassName = modelClassName;
-        this.model = clazz.newInstance();
-        this.current = model;
-        this.modelMetadata = new ModelMetadata(clazz);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("modelClassName", modelClassName);
     }
 
-    public ModelMetadata getModelMetadata() {
+    public ModelMetadata getModelMetadata() throws IllegalAccessException, InstantiationException {
+        if (modelMetadata == null) {
+            loadModelInformation();
+            this.modelMetadata = new ModelMetadata(getModelClass());
+        }
         return modelMetadata;
     }
 
@@ -72,5 +69,21 @@ public abstract class AutoAdminBaseBean extends ControllerBean {
 
     public void setModel(Object model) {
         this.model = model;
+        this.setSelected(model);
+    }
+
+    public Class<?> getModelClass() {
+        return modelClass;
+    }
+
+    public void setModelClass(Class<?> modelClass) {
+        this.modelClass = modelClass;
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("modelClass", modelClass);
+    }
+
+    protected void loadModelInformation() throws IllegalAccessException, InstantiationException {
+        setModelClass(adminBean.getModelClass(getModelClassName()));
+        setModel(modelClass.newInstance());
+        this.current = model;
     }
 }

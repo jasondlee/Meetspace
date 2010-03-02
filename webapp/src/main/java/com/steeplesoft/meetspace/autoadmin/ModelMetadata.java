@@ -10,13 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by IntelliJ IDEA.
- * User: jasonlee
- * Date: Feb 28, 2010
- * Time: 2:06:50 PM
- * To change this template use File | Settings | File Templates.
- */
 public class ModelMetadata {
     private Class clazz;
     private String name;
@@ -29,6 +22,18 @@ public class ModelMetadata {
         displayName = name;
 
         determineFieldInformation();
+    }
+
+    public Class getClazz() {
+        return clazz;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public List<ColumnMetadata> getColumns() {

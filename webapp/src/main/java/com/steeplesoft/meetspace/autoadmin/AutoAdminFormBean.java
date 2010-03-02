@@ -2,6 +2,7 @@ package com.steeplesoft.meetspace.autoadmin;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Model;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -9,14 +10,16 @@ import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
+import javax.inject.Named;
 import javax.persistence.TemporalType;
 import java.util.TimeZone;
 
-@Model
+@Named
+@SessionScoped
 public class AutoAdminFormBean extends AutoAdminBaseBean {
     HtmlPanelGrid grid;
 
-    public UIComponent getPanelGrid() {
+    public UIComponent getPanelGrid() throws IllegalAccessException, InstantiationException {
         if (grid == null) {
             final FacesContext facesContext = FacesContext.getCurrentInstance();
             final Application application = facesContext.getApplication();
@@ -59,10 +62,10 @@ public class AutoAdminFormBean extends AutoAdminBaseBean {
                             DateTimeConverter dtc = (DateTimeConverter) application.createConverter("javax.faces.DateTime");
                             dtc.setLocale(facesContext.getViewRoot().getLocale());
                             dtc.setTimeZone(TimeZone.getDefault());
-                            if (TemporalType.DATE.equals(cmd.getTemporalType())) {
+                            if ("Date".equals(cmd.getTemporalType())) {
                                 dtc.setType("date");
                                 dtc.setPattern("yyyy-MM-dd");
-                            } else if (TemporalType.TIME.equals(cmd.getTemporalType())) {
+                            } else if ("Time".equals(cmd.getTemporalType())) {
                                 dtc.setType("time");
                                 dtc.setPattern("h:mm a");
                             } else {
