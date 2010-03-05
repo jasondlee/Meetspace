@@ -15,7 +15,7 @@
         <h:messages layout="table"/>
         <h1>Meetspace Administration</h1>
         <ul style="margin-left: 15px">
-            <ui:repeat value="#{autoAdmin.modelList}" var="modelClass">
+            <ui:repeat value="#{autoAdminBean.modelList}" var="modelClass">
                 <li>
                     <h:outputLink value="#{request.contextPath}/autoAdmin/list.jsf?model=#{modelClass}">#{modelClass}</h:outputLink>
                 </li>

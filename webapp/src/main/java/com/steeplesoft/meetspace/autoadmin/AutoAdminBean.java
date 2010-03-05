@@ -1,20 +1,21 @@
 package com.steeplesoft.meetspace.autoadmin;
 
 import com.steeplesoft.meetspace.view.ControllerBean;
-import org.osgi.service.blueprint.reflect.ComponentMetadata;
+import com.sun.mojarra.scales.component.DateSelector;
+import com.sun.mojarra.scales.component.HtmlEditor;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.enterprise.inject.Model;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
 import javax.faces.component.UIOutput;
 import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.model.DataModel;
+import javax.persistence.TemporalType;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -64,7 +65,7 @@ public class AutoAdminBean extends ControllerBean {
     }
 
     public String getListViewId() {
-        return NAV_LIST + "?model="+getModelClassName();
+        return NAV_LIST + "?model=" + getModelClassName();
     }
 
     public String getAddViewId() {
@@ -146,7 +147,7 @@ public class AutoAdminBean extends ControllerBean {
 
     public String getModelClassName() {
         if (modelClassName == null) {
-            modelClassName = (String)facesContext.getExternalContext().getRequestParameterMap().get("autoAdminForm:modelClassName");
+            modelClassName = (String) facesContext.getExternalContext().getRequestParameterMap().get("autoAdminForm:modelClassName");
             if (modelClassName != null) {
                 setModelClass(loadModelClass(modelClassName));
             }
@@ -173,6 +174,7 @@ public class AutoAdminBean extends ControllerBean {
 
 
     // Component-binding methods
+
     public UIComponent getDataTable() throws IllegalAccessException, InstantiationException {
         if (table == null) {
             table = (HtmlDataTable) application.createComponent(HtmlDataTable.COMPONENT_TYPE);
@@ -193,7 +195,7 @@ public class AutoAdminBean extends ControllerBean {
 
                 HtmlOutputText output = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
                 output.setValueExpression("value",
-                        application.getExpressionFactory().createValueExpression(elContext, "#{item." + name +"}", cmd.getType()));
+                        application.getExpressionFactory().createValueExpression(elContext, "#{item." + name + "}", cmd.getType()));
                 determineNecessaryConverters(output, cmd);
                 column.getChildren().add(output);
 
@@ -207,7 +209,7 @@ public class AutoAdminBean extends ControllerBean {
     }
 
     public void setDataTable(UIComponent table) {
-        this.table = (HtmlDataTable)table;
+        this.table = (HtmlDataTable) table;
     }
 
     public HtmlPanelGrid getPanelGrid() throws IllegalAccessException, InstantiationException {
@@ -237,7 +239,7 @@ public class AutoAdminBean extends ControllerBean {
                     output.setStyle("font-weight: bold;");
 
                     HtmlInputHidden hidden = (HtmlInputHidden) application.createComponent(HtmlInputHidden.COMPONENT_TYPE);
-                    hidden.setId("autoAdmin_hidden_"+name);
+                    hidden.setId("autoAdmin_hidden_" + name);
                     hidden.setValue(value);
 
                     group.getChildren().add(output);
@@ -245,12 +247,13 @@ public class AutoAdminBean extends ControllerBean {
 
                     field = group;
                 } else {
-                    HtmlInputText input = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+                    UIOutput component = createAppropriateComponent(cmd);
+                    //(HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
                     ValueExpression ve = application.getExpressionFactory().createValueExpression(elContext, "#{autoAdminBean.selected." + name + "}", cmd.getType());
-                    input.setValueExpression("value", ve);
+                    component.setValueExpression("value", ve);
                     final String simpleName = cmd.getType().getSimpleName();
-                    determineNecessaryConverters(input, cmd);
-                    field = input;
+                    determineNecessaryConverters(component, cmd);
+                    field = component;
                 }
 
                 field.setId("autoAdmin_" + name);
@@ -262,8 +265,41 @@ public class AutoAdminBean extends ControllerBean {
         return grid;
     }
 
+    private UIOutput createAppropriateComponent(ColumnMetadata cmd) {
+        UIOutput comp = null;
+
+        if (facesContext.getViewRoot().getViewId().endsWith("form.xhtml")) {
+            if (cmd.getType().equals(String.class)) {
+                if (cmd.getLength() <= 255) {
+                    comp = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+                } else {
+                    HtmlEditor he = (HtmlEditor) application.createComponent(HtmlEditor.COMPONENT_TYPE);
+                    he.getAttributes().put("width", "100%");
+
+                    comp = he;
+                }
+            } else if (cmd.getType().equals(Date.class)) {
+                if (cmd.getTemporalType().equals(TemporalType.DATE)) {
+                    DateSelector ds = (DateSelector) application.createComponent(DateSelector.COMPONENT_TYPE);
+                    ds.setFormat("yyyy-MM-dd");
+                    comp = ds;
+                } else {
+                    comp = //(Combo) application.createComponent(Combo.COMPONENT_TYPE);
+                            (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+                }
+
+            } else {
+                comp = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+            }
+        } else {
+            comp = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        }
+
+        return comp;
+    }
+
     public void setPanelGrid(UIComponent grid) {
-        this.grid = (HtmlPanelGrid)grid;
+        this.grid = (HtmlPanelGrid) grid;
     }
 
     protected void determineNecessaryConverters(UIOutput component, ColumnMetadata cmd) {
@@ -274,10 +310,10 @@ public class AutoAdminBean extends ControllerBean {
                 DateTimeConverter dtc = (DateTimeConverter) application.createConverter("javax.faces.DateTime");
                 dtc.setLocale(facesContext.getViewRoot().getLocale());
                 dtc.setTimeZone(TimeZone.getDefault());
-                if ("DATE".equals(cmd.getTemporalType())) {
+                if (TemporalType.DATE.equals(cmd.getTemporalType())) {
                     dtc.setType("date");
                     dtc.setPattern("yyyy-MM-dd");
-                } else if ("TIME".equals(cmd.getTemporalType())) {
+                } else if (TemporalType.TIME.equals(cmd.getTemporalType())) {
                     dtc.setType("time");
                     dtc.setPattern("h:mm a");
                 } else {
@@ -309,20 +345,20 @@ public class AutoAdminBean extends ControllerBean {
 
         HtmlOutputLink viewLink = (HtmlOutputLink) application.createComponent(HtmlOutputLink.COMPONENT_TYPE);
         viewLink.setValueExpression("value",
-                application.getExpressionFactory().createValueExpression(elContext, "#{request.contextPath}"+AutoAdminBean.NAV_BASE + "/view.jsf?model=" + model + "&id=#{item.id}", Object.class));
+                application.getExpressionFactory().createValueExpression(elContext, "#{request.contextPath}" + AutoAdminBean.NAV_BASE + "/view.jsf?model=" + model + "&id=#{item.id}", Object.class));
         addOutputText(viewLink, "View");
         column.getChildren().add(viewLink);
         addOutputText(column, "&#160;");
 
         HtmlOutputLink editLink = (HtmlOutputLink) application.createComponent(HtmlOutputLink.COMPONENT_TYPE);
         editLink.setValueExpression("value",
-                application.getExpressionFactory().createValueExpression(elContext, "#{request.contextPath}"+AutoAdminBean.NAV_BASE + "/form.jsf?model=" + model + "&id=#{item.id}", Object.class));
+                application.getExpressionFactory().createValueExpression(elContext, "#{request.contextPath}" + AutoAdminBean.NAV_BASE + "/form.jsf?model=" + model + "&id=#{item.id}", Object.class));
         addOutputText(editLink, "Edit");
         column.getChildren().add(editLink);
         addOutputText(column, "&#160;");
 
         HtmlOutputLink deleteLink = (HtmlOutputLink) application.createComponent(HtmlOutputLink.COMPONENT_TYPE);
-        deleteLink.setValue(request.getContextPath() + AutoAdminBean.NAV_BASE + "/form.jsf?model=" + model + "&id="+id);
+        deleteLink.setValue(request.getContextPath() + AutoAdminBean.NAV_BASE + "/form.jsf?model=" + model + "&id=" + id);
         addOutputText(deleteLink, "Delete");
         column.getChildren().add(deleteLink);
 

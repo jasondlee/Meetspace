@@ -3,51 +3,34 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
       template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam id="model" name="model" value="#{autoAdminBean.modelClassName}"
+                         required="true"
+                         requiredMessage="You did not specify a model class. (The model parameter is missing)"
+                         validatorMessage="Invalid model class. (The model parameter is too short to be a class name)">
+                <f:validateLength minimum="1"/>
+            </f:viewParam>
+            <f:viewParam id="id" name="id" value="#{autoAdminBean.id}"
+                         validatorMessage="Invalid id. (The id parameter is too short to be a class name)"/>
+        </f:metadata>
+    </ui:define>
     <ui:define name="content">
             <h:form id="memberForm">
-                <h:panelGrid columns="2" style="vertical-align: top">
-                    <h:outputText value="Name" />
-                    <h:outputText id="meetingName" value="#{meetingBean.selected.name}" title="Name" />
-
-                    <h:outputText value="Description"/>
-                    <h:outputText id="description" value="#{meetingBean.selected.description}" title="Description" />
-                    
-                    <h:outputText value="Topic"/>
-                    <h:outputText id="topic" value="#{meetingBean.selected.topic}" title="Topic" />
-
-                    <h:outputText value="Speaker"/>
-                    <h:outputText id="speaker" value="#{meetingBean.selected.speaker}" title="Speaker" />
-
-                    <h:outputText value="Date(s)" />
-                    <h:panelGroup>
-                        <h:outputText value="#{meetingBean.selected.startDate}">
-                            <f:convertDateTime dateStyle="full"/>
-                        </h:outputText>
-                        &#160;
-                        <h:outputText value="#{meetingBean.selected.startTime}">
-                            <f:convertDateTime type="time" timeStyle="short"/>
-                        </h:outputText>
-                        <br/>
-                        <h:outputText value="#{meetingBean.selected.endDate}">
-                            <f:convertDateTime dateStyle="full"/>
-                        </h:outputText>
-                        &#160;
-                        <h:outputText value="#{meetingBean.selected.endTime}">
-                            <f:convertDateTime type="time" timeStyle="short"/>
-                        </h:outputText>
-                    </h:panelGroup>
-
-                    <h:outputText value="Registrations (#{meetingBean.selected.registrations.size()})"/>
-                    <h:dataTable value="#{meetingBean.selected.registrations}" var="registration">
-                        <h:column>
-                            #{registration.fullName}
-                        </h:column>
-                    </h:dataTable>
-
-                </h:panelGrid>
-                <h:commandLink action="form" value="Edit"/>&#160;
-                <h:commandLink action="#{meetingBean.prepareCreate}" value="Add New"/>&#160;
-                <h:commandLink action="#{meetingBean.prepareList}" value="Meeting List" immediate="true"/>&#160;
+                <h:panelGrid id="grid" width="100%" binding="#{autoAdminBean.panelGrid}"/>
+                <h:outputLink value="#{request.contextPath}/autoAdmin/form.jsf">Edit
+                    <f:param name="model" value="#{autoAdminBean.modelClassName}"/>
+                    <f:param name="id" value="#{autoAdminBean.selected.id}"/>
+                </h:outputLink>
+                &#160;
+                <h:outputLink value="#{request.contextPath}/autoAdmin/form.jsf">Add New
+                    <f:param name="model" value="#{autoAdminBean.modelClassName}"/>
+                </h:outputLink>
+                &#160;
+                <h:outputLink value="#{request.contextPath}/autoAdmin/list.jsf">List
+                    <f:param name="model" value="#{autoAdminBean.modelClassName}"/>
+                </h:outputLink>
+                &#160;
             </h:form>
     </ui:define>
 </ui:composition>

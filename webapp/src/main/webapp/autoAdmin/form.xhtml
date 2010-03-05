@@ -30,7 +30,7 @@
         <h1>Meetspace Auto Admin - #{autoAdminBean.modelClassName}</h1>
         <h:form id="autoAdminForm">
             <h:inputHidden id="modelClassName" value="#{autoAdminBean.modelClassName}"/>
-            <h:panelGrid id="grid" binding="#{autoAdminBean.panelGrid}"/>
+            <h:panelGrid id="grid" width="100%" binding="#{autoAdminBean.panelGrid}"/>
             <ui:remove>
                 <ui:repeat id="fields" value="#{autoAdminBean.modelMetadata.columns}" var="cmd">
                     <h:outputText id="autoAdminForm_#{cmd.name}_label" value="#{cmd.name}"
