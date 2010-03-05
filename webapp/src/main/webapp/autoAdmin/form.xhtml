@@ -13,52 +13,62 @@
 <ui:composition id="composition" template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="metadata">
         <f:metadata>
-            <f:viewParam id="model" name="model" value="#{autoAdminFormBean.modelClassName}"
+            <f:viewParam id="model" name="model" value="#{autoAdminBean.modelClassName}"
                          required="true"
                          requiredMessage="You did not specify a model class. (The model parameter is missing)"
                          validatorMessage="Invalid model class. (The model parameter is too short to be a class name)">
                 <f:validateLength minimum="1"/>
             </f:viewParam>
-            <f:viewParam id="id" name="id" value="#{autoAdminFormBean.id}" validatorMessage="Invalid id. (The id parameter is too short to be a class name)"/>
+            <f:viewParam id="id" name="id" value="#{autoAdminBean.id}"
+                         validatorMessage="Invalid id. (The id parameter is too short to be a class name)"/>
         </f:metadata>
     </ui:define>
     <ui:define name="title">Meetspace Auto Admin</ui:define>
     <ui:define name="content">
         <h:messages layout="table"/>
 
-        <h1>Meetspace Auto Admin - #{autoAdminFormBean.modelClassName}</h1>
+        <h1>Meetspace Auto Admin - #{autoAdminBean.modelClassName}</h1>
         <h:form id="autoAdminForm">
-            <h:inputHidden value="#{autoAdminFormBean.modelClassName}"/>
+            <h:inputHidden id="modelClassName" value="#{autoAdminBean.modelClassName}"/>
+            <h:panelGrid id="grid" binding="#{autoAdminBean.panelGrid}"/>
             <ui:remove>
-                <h:panelGrid id="autoAdminGrid" binding="#{autoAdminFormBean.panelGrid}"/>
-            </ui:remove>
-            <ui:repeat value="#{autoAdminFormBean.modelMetadata.columns}" var="cmd">
-                <h:outputText id="autoAdminForm_#{cmd.name}_label" value="#{cmd.name}" style="width: 15%; display: block; float: left;"/>
-                <ui:fragment rendered="#{cmd.primaryKey and empty autoAdminFormBean.selected.id}">
-                    <h:outputText value="#{autoAdminFormBean.selected[cmd.name]}"/>
-                    <h:inputHidden value="#{autoAdminFormBean.selected[cmd.name]}"/>
-                </ui:fragment>
-                <ui:fragment rendered="#{!cmd.primaryKey}">
-                    <h:inputText value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{cmd.type.simpleName == 'String'}"/>
-                    <sc:dateSelector value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'DATE')}" format="yyyy-MM-dd"/>
-                    <h:inputText value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIME')}" size="9" maxlength="8">
-                        <f:convertDateTime type="date" pattern="h:mm a"/>
-                    </h:inputText>
-                    <h:inputText value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIMESTAMP')}" size="19" maxlength="18">
-                        <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm"/>
-                    </h:inputText>
-                    <h:selectOneListbox value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{cmd.type.simpleName == 'Boolean'}" size="1">
-                        <f:selectItem itemValue="" itemLabel=""/>
-                        <f:selectItem itemValue="true" itemLabel="True"/>
-                        <f:selectItem itemValue="false" itemLabel="False"/>
-                    </h:selectOneListbox>
-                </ui:fragment>
+                <ui:repeat id="fields" value="#{autoAdminBean.modelMetadata.columns}" var="cmd">
+                    <h:outputText id="autoAdminForm_#{cmd.name}_label" value="#{cmd.name}"
+                                  style="width: 15%; display: block; float: left;"/>
+                    <ui:fragment id="key" rendered="#{cmd.isPrimaryKey and empty autoAdminBean.selected.id}">
+                        <h:outputText value="#{autoAdminBean.selected[cmd.name]}"/>
+                        <h:inputHidden value="#{autoAdminBean.selected[cmd.name]}"/>
+                    </ui:fragment>
+                    <ui:fragment id="nonkey" rendered="#{!cmd.isPrimaryKey}">
+                        <h:inputText id="string" value="#{autoAdminBean.selected[cmd.name]}"
+                                     rendered="#{cmd.type.simpleName == 'String'}"/>
+                        <sc:dateSelector id="date" value="#{autoAdminBean.selected[cmd.name]}"
+                                         rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'DATE')}"
+                                         format="yyyy-MM-dd"/>
+                        <h:inputText id="time" value="#{autoAdminBean.selected[cmd.name]}"
+                                     rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIME')}"
+                                     size="9" maxlength="8">
+                            <f:convertDateTime type="date" pattern="h:mm a"/>
+                        </h:inputText>
+                        <h:inputText id="datetime" value="#{autoAdminBean.selected[cmd.name]}"
+                                     rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIMESTAMP')}"
+                                     size="19" maxlength="18">
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm"/>
+                        </h:inputText>
+                        <h:selectOneListbox id="boolean" value="#{autoAdminBean.selected[cmd.name]}"
+                                            rendered="#{cmd.type.simpleName == 'Boolean'}" size="1">
+                            <f:selectItem itemValue="" itemLabel=""/>
+                            <f:selectItem itemValue="true" itemLabel="True"/>
+                            <f:selectItem itemValue="false" itemLabel="False"/>
+                        </h:selectOneListbox>
+                    </ui:fragment>
+                    <br/>
+                </ui:repeat>
                 <br/>
-            </ui:repeat>
-            <br/>
-            <h:commandButton action="#{autoAdminFormBean.create}" value="Add #{autoAdminFormBean.modelClassName}" rendered="#{empty autoAdminFormBean.selected.id}"/>
-            <h:commandButton action="#{autoAdminFormBean.edit}" value="Update #{autoAdminFormBean.modelClassName}" rendered="#{!empty autoAdminFormBean.selected.id}"/>
-            <h:commandButton action="list" value="Cancel"/>
+            </ui:remove>
+            <h:commandButton id="saveButton" action="#{autoAdminBean.save}"
+                             value="Save #{autoAdminBean.modelClassName}"/>
+            <h:commandButton id="cancelButton" action="list" value="Cancel"/>
         </h:form>
     </ui:define>
 </ui:composition>

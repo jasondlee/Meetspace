@@ -6,7 +6,7 @@
       template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="metadata">
         <f:metadata>
-            <f:viewParam id="model" name="model" value="#{autoAdminListBean.modelClassName}"
+            <f:viewParam id="model" name="model" value="#{autoAdminBean.modelClassName}"
                          required="true"
                          requiredMessage="You did not specify a model class. (The model parameter is missing)"
                          validatorMessage="Invalid model class. (The model parameter is too short to be a class name)">
@@ -16,22 +16,23 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="autoAdminListForm">
-            <h:outputLink value="form.jsf?model=#{autoAdminListBean.modelClassName}">Add</h:outputLink>
+            <h:inputHidden id="modelClassName" value="#{autoAdminBean.modelClassName}"/>
+            <h:outputLink value="form.jsf?model=#{autoAdminBean.modelClassName}">Add</h:outputLink>
             
-            <h:dataTable binding="#{autoAdminListBean.dataTable}"/>
+            <h:dataTable id="table" binding="#{autoAdminBean.dataTable}"/>
 
             <div id="tableNav">
                 <div id="prevdiv" style="float: left;">
-                    <h:commandLink id="prevLink" action="#{autoAdminListBean.previous}" value="Previous #{autoAdminListBean.paginator.pageSize}" rendered="#{autoAdminListBean.paginator.hasPreviousPage}">
+                    <h:commandLink id="prevLink" action="#{autoAdminBean.previous}" value="Previous #{autoAdminBean.paginator.pageSize}" rendered="#{autoAdminBean.paginator.hasPreviousPage}">
                         <f:ajax execute="@this" render="@form"/>
                     </h:commandLink>&#160;
                 </div>
                 <div id="countdiv" style="text-align: center; float: left;">
-                    <h:outputText value="#{autoAdminListBean.paginator.pageFirstItem + 1} to #{autoAdminListBean.paginator.pageLastItem + 1} of #{autoAdminListBean.paginator.itemsCount}"/>
+                    <h:outputText value="#{autoAdminBean.paginator.pageFirstItem + 1} to #{autoAdminBean.paginator.pageLastItem + 1} of #{autoAdminBean.paginator.itemsCount}"/>
                     (
-                    <h:selectOneMenu id="rowsPerPage" value="#{autoAdminListBean.rowsPerPage}"
+                    <h:selectOneMenu id="rowsPerPage" value="#{autoAdminBean.rowsPerPage}"
                                      valueChangeListener="#{meeting.resetPagination}"
-                                     onchange1="jsf.ajax.request(this, event, {execute: 'autoAdminListForm:rowsPerPage', render: 'autoAdminListForm'}); return false;">
+                                     onchange="jsf.ajax.request(this, event, {execute: 'autoAdminListForm:rowsPerPage', render: 'autoAdminListForm'}); return false;">
                                      <f:ajax execute="@this" render="@form"/>
                         <f:selectItem itemValue="5" />
                         <f:selectItem itemValue="10" />
@@ -41,12 +42,12 @@
                 </div>
                 <div id="nextdiv" style="text-align: right; float: left;">
                     &#160;
-                    <h:commandLink id="nextLink" action="#{autoAdminListBean.next}" value="Next #{autoAdminListBean.paginator.pageSize}" rendered="#{autoAdminListBean.paginator.hasNextPage}">
+                    <h:commandLink id="nextLink" action="#{autoAdminBean.next}" value="Next #{autoAdminBean.paginator.pageSize}" rendered="#{autoAdminBean.paginator.hasNextPage}">
                         <f:ajax execute="@this" render="@form"/>
                     </h:commandLink>
                 </div>
                 <script type="text/javascript">
-                    var width = document.getElementById("autoAdminListForm:meetingTable").clientWidth;
+                    var width = document.getElementById("autoAdminListForm:table").clientWidth;
                     document.getElementById("prevdiv").style.width = (width/4)+"px";
                     document.getElementById("countdiv").style.width = (width/2)+"px";
                     document.getElementById("nextdiv").style.width = (width/4)+"px";

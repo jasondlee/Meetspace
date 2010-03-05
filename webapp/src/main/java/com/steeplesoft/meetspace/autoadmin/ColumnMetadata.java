@@ -43,7 +43,7 @@ public class ColumnMetadata {
         this.temporalType = temporalType;
     }
 
-    public boolean isPrimaryKey() {
+    public boolean getIsPrimaryKey() {
         return isPrimaryKey;
     }
 

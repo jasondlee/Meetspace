@@ -11,7 +11,7 @@ import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 
 public abstract class ControllerBean implements Serializable {
-    public static String NAV_REDIRECT = "?faces-redirect=true";
+    public static String NAV_REDIRECT = "&faces-redirect=true";
 
     @Inject
     protected DataAccessController dataAccess;
@@ -97,14 +97,14 @@ public abstract class ControllerBean implements Serializable {
     }
 
     public String prepareCreate() {
-        current = newEntityInstance();
+        setSelected(newEntityInstance());
         selectedItemIndex = -1;
         return getAddViewId() + NAV_REDIRECT;
     }
 
     public String create() {
         try {
-            dataAccess.create(current);
+            dataAccess.create(getSelected());
 //            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GroupMemberCreated")); // Left as an example :)
             JsfUtil.addSuccessMessage("Group member created");
             return getListViewId() + NAV_REDIRECT;
@@ -116,14 +116,14 @@ public abstract class ControllerBean implements Serializable {
     }
 
     public String prepareEdit() {
-        current = getList().getRowData();
+        setSelected(getList().getRowData());
         selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
         return getEditViewId() + NAV_REDIRECT;
     }
 
     public String edit() {
         try {
-            dataAccess.edit(current);
+            dataAccess.edit(getSelected());
             JsfUtil.addSuccessMessage("Group member updated");
             return getListViewId() + NAV_REDIRECT;
         } catch (Exception e) {
@@ -134,10 +134,10 @@ public abstract class ControllerBean implements Serializable {
     }
 
     public String delete() {
-        current = getList().getRowData();
+        setSelected(getList().getRowData());
         selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
         try {
-            dataAccess.remove(current);
+            dataAccess.remove(getSelected());
             JsfUtil.addSuccessMessage("Group member deleted");
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "A persistence error occurred.");
@@ -147,7 +147,7 @@ public abstract class ControllerBean implements Serializable {
     }
 
     public String prepareView() {
-        current = getList().getRowData();
+        setSelected(getList().getRowData());
         selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
         return getViewViewId() + NAV_REDIRECT;
     }
@@ -156,7 +156,7 @@ public abstract class ControllerBean implements Serializable {
         // If an ID is in the URL, that overrides what might be in the session state
         String id = JsfUtil.getRequestParameter("id");
         if (id != null) {
-            current = dataAccess.find(getEntityClass(), Long.valueOf(id));
+            setSelected(dataAccess.find(getEntityClass(), Long.valueOf(id)));
         }
 
         if (current != null) {
@@ -168,7 +168,7 @@ public abstract class ControllerBean implements Serializable {
 
     public Object getSelected() {
         if (current == null) {
-            current = newEntityInstance();
+            setSelected(newEntityInstance());
             selectedItemIndex = -1;
         }
         return current;

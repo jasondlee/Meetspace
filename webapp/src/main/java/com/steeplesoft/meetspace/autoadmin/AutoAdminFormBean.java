@@ -14,11 +14,12 @@ import javax.inject.Named;
 import javax.persistence.TemporalType;
 import java.util.TimeZone;
 
-@Named
-@SessionScoped
+//@Named
+//@SessionScoped
 public class AutoAdminFormBean extends AutoAdminBaseBean {
     HtmlPanelGrid grid;
 
+/*
     public UIComponent getPanelGrid() throws IllegalAccessException, InstantiationException {
         if (grid == null) {
             final FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -90,10 +91,11 @@ public class AutoAdminFormBean extends AutoAdminBaseBean {
 
         return grid;
     }
+*/
 
-    public String save() {
-        System.out.println(getModel());
-
-        return "";
-    }
+//    public String save() {
+//        System.out.println(getModel());
+//
+//        return "";
+//    }
 }
