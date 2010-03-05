@@ -26,7 +26,7 @@ public class Registration implements Serializable {
     @Basic(optional = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "emailAddress", length = 255)
     @NotEmpty
@@ -47,15 +47,15 @@ public class Registration implements Serializable {
     public Registration() {
     }
 
-    public Registration(Integer id) {
+    public Registration(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

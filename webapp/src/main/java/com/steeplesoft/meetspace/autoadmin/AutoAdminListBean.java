@@ -3,18 +3,17 @@ package com.steeplesoft.meetspace.autoadmin;
 import com.steeplesoft.meetspace.view.ControllerBean;
 
 import javax.el.ELContext;
+import javax.el.ValueExpression;
 import javax.enterprise.inject.Model;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlColumn;
-import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.component.html.HtmlPanelGrid;
+import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.model.DataModel;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -46,17 +45,18 @@ public class AutoAdminListBean extends AutoAdminBaseBean {
 //                    #{meeting.name}
 //                </h:column>
                 //column.getFacets().put("header", createOutputText(name, application, ));
-                addHeaderFacet(application, column, name);
+                addHeaderFacet(column, name);
 
                 HtmlOutputText output = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
                 output.setValueExpression("value",
                         application.getExpressionFactory().createValueExpression(elContext, "#{item." + name +"}", cmd.getType()));
                 determineNecessaryConverters(output, cmd.getType());
                 column.getChildren().add(output);
+
                 table.getChildren().add(column);
             }
+            addCommandColumn(table, this.getModelClassName());
 
-            addCommandColumn(table);
         }
 
         return table;
@@ -73,7 +73,7 @@ public class AutoAdminListBean extends AutoAdminBaseBean {
         }
     }
 
-    protected void addHeaderFacet(Application application, HtmlColumn column, Object value) {
+    protected void addHeaderFacet(HtmlColumn column, Object value) {
         HtmlOutputText header = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         header.setStyle("font-weight: bold;");
         header.setValue(value);
@@ -81,7 +81,34 @@ public class AutoAdminListBean extends AutoAdminBaseBean {
         column.getFacets().put("header", header);
     }
 
-    protected void addCommandColumn(HtmlDataTable table) {
+    protected void addCommandColumn(HtmlDataTable table, String model) {
+        HtmlColumn column = (HtmlColumn) application.createComponent(HtmlColumn.COMPONENT_TYPE);
+        ValueExpression id = application.getExpressionFactory().createValueExpression(elContext, "#{item.id}", Object.class);
+
+        addHeaderFacet(column, "&#160;");
+        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+
+        HtmlOutputLink viewLink = (HtmlOutputLink) application.createComponent(HtmlOutputLink.COMPONENT_TYPE);
+        viewLink.setValueExpression("value",
+                application.getExpressionFactory().createValueExpression(elContext, "#{request.contextPath}"+AutoAdminBean.NAV_BASE + "/view.jsf?model=" + model + "&id=#{item.id}", Object.class));
+        addOutputText(viewLink, "View");
+        column.getChildren().add(viewLink);
+        addOutputText(column, "&#160;");
+
+        HtmlOutputLink editLink = (HtmlOutputLink) application.createComponent(HtmlOutputLink.COMPONENT_TYPE);
+        editLink.setValueExpression("value",
+                application.getExpressionFactory().createValueExpression(elContext, "#{request.contextPath}"+AutoAdminBean.NAV_BASE + "/form.jsf?model=" + model + "&id=#{item.id}", Object.class));
+        addOutputText(editLink, "Edit");
+        column.getChildren().add(editLink);
+        addOutputText(column, "&#160;");
+
+        HtmlOutputLink deleteLink = (HtmlOutputLink) application.createComponent(HtmlOutputLink.COMPONENT_TYPE);
+        deleteLink.setValue(request.getContextPath() + AutoAdminBean.NAV_BASE + "/form.jsf?model=" + model + "&id="+id);
+        addOutputText(deleteLink, "Delete");
+        column.getChildren().add(deleteLink);
+
+        table.getChildren().add(column);
+
 //        <h:column>
 //            <f:facet name="header">
 //                <h:outputText value="&nbsp;"/>
@@ -95,5 +122,12 @@ public class AutoAdminListBean extends AutoAdminBaseBean {
 //                <f:ajax execute="@this" render="@form"/>
 //            </h:commandLink>
 //        </h:column>
+    }
+
+    protected void addOutputText(UIComponent parent, String text) {
+        HtmlOutputText outputText = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        outputText.setValue(text);
+        outputText.setEscape(false);
+        parent.getChildren().add(outputText);
     }
 }

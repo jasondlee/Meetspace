@@ -35,7 +35,7 @@ public class Meeting implements Serializable {
     @Basic(optional = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", length = 255)
     @NotNull @Size(min=1, max=255)
@@ -74,15 +74,15 @@ public class Meeting implements Serializable {
     public Meeting() {
     }
 
-    public Meeting(Integer id) {
+    public Meeting(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

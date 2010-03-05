@@ -39,7 +39,7 @@ public class Sponsor implements Serializable {
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", length = 255)
     @NotEmpty
@@ -66,15 +66,15 @@ public class Sponsor implements Serializable {
     public Sponsor() {
     }
 
-    public Sponsor(Integer id) {
+    public Sponsor(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

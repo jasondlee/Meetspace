@@ -19,6 +19,7 @@
                          validatorMessage="Invalid model class. (The model parameter is too short to be a class name)">
                 <f:validateLength minimum="1"/>
             </f:viewParam>
+            <f:viewParam id="id" name="id" value="#{autoAdminFormBean.id}" validatorMessage="Invalid id. (The id parameter is too short to be a class name)"/>
         </f:metadata>
     </ui:define>
     <ui:define name="title">Meetspace Auto Admin</ui:define>
@@ -27,25 +28,26 @@
 
         <h1>Meetspace Auto Admin - #{autoAdminFormBean.modelClassName}</h1>
         <h:form id="autoAdminForm">
+            <h:inputHidden value="#{autoAdminFormBean.modelClassName}"/>
             <ui:remove>
                 <h:panelGrid id="autoAdminGrid" binding="#{autoAdminFormBean.panelGrid}"/>
             </ui:remove>
             <ui:repeat value="#{autoAdminFormBean.modelMetadata.columns}" var="cmd">
                 <h:outputText id="autoAdminForm_#{cmd.name}_label" value="#{cmd.name}" style="width: 15%; display: block; float: left;"/>
                 <ui:fragment rendered="#{cmd.primaryKey and empty autoAdminFormBean.selected.id}">
-                    <h:outputText value="#{autoAdminFormBean.model[cmd.name]}"/>
-                    <h:inputHidden value="#{autoAdminFormBean.model[cmd.name]}"/>
+                    <h:outputText value="#{autoAdminFormBean.selected[cmd.name]}"/>
+                    <h:inputHidden value="#{autoAdminFormBean.selected[cmd.name]}"/>
                 </ui:fragment>
                 <ui:fragment rendered="#{!cmd.primaryKey}">
-                    <h:inputText value="#{autoAdminFormBean.model[cmd.name]}" rendered="#{cmd.type.simpleName == 'String'}"/>
-                    <sc:dateSelector value="#{autoAdminFormBean.model[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'DATE')}" format="yyyy-MM-dd"/>
-                    <h:inputText value="#{autoAdminFormBean.model[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIME')}" size="9" maxlength="8">
+                    <h:inputText value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{cmd.type.simpleName == 'String'}"/>
+                    <sc:dateSelector value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'DATE')}" format="yyyy-MM-dd"/>
+                    <h:inputText value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIME')}" size="9" maxlength="8">
                         <f:convertDateTime type="date" pattern="h:mm a"/>
                     </h:inputText>
-                    <h:inputText value="#{autoAdminFormBean.model[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIMESTAMP')}" size="19" maxlength="18">
+                    <h:inputText value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIMESTAMP')}" size="19" maxlength="18">
                         <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm"/>
                     </h:inputText>
-                    <h:selectOneListbox value="#{autoAdminFormBean.model[cmd.name]}" rendered="#{cmd.type.simpleName == 'Boolean'}" size="1">
+                    <h:selectOneListbox value="#{autoAdminFormBean.selected[cmd.name]}" rendered="#{cmd.type.simpleName == 'Boolean'}" size="1">
                         <f:selectItem itemValue="" itemLabel=""/>
                         <f:selectItem itemValue="true" itemLabel="True"/>
                         <f:selectItem itemValue="false" itemLabel="False"/>

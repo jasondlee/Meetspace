@@ -26,6 +26,7 @@ import java.util.*;
 @Named(value = "autoAdmin")
 @SessionScoped
 public class AutoAdminBean implements Serializable {
+    public static final String NAV_BASE = "/autoAdmin";
     public static final String NAV_ADD = "/autoAdmin/form";
     public static final String NAV_EDIT = "/autoAdmin/form";
     public static final String NAV_LIST = "/autoAdmin/list";
