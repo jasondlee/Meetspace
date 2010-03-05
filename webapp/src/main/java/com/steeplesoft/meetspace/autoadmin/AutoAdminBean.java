@@ -1,6 +1,7 @@
 package com.steeplesoft.meetspace.autoadmin;
 
 import com.steeplesoft.meetspace.view.ControllerBean;
+import org.osgi.service.blueprint.reflect.ComponentMetadata;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
@@ -8,6 +9,7 @@ import javax.enterprise.inject.Model;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
+import javax.faces.component.UIOutput;
 import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -89,7 +91,7 @@ public class AutoAdminBean extends ControllerBean {
         } else {
             ret = edit();
         }
-        
+
         return ret;
     }
 
@@ -103,7 +105,7 @@ public class AutoAdminBean extends ControllerBean {
 
     public Class<?> getModelClass() {
         if (modelClass == null) {
-            modelClass = loadModelClass(getModelClassName());   
+            modelClass = loadModelClass(getModelClassName());
         }
         return modelClass;
     }
@@ -174,7 +176,6 @@ public class AutoAdminBean extends ControllerBean {
     public UIComponent getDataTable() throws IllegalAccessException, InstantiationException {
         if (table == null) {
             table = (HtmlDataTable) application.createComponent(HtmlDataTable.COMPONENT_TYPE);
-//            table.setValueExpression("#{autoAdmin.list};" +
             table.setValueExpression("value",
                     application.getExpressionFactory().createValueExpression(elContext, "#{autoAdminBean.list}", DataModel.class));
             table.setVar("item");
@@ -188,17 +189,12 @@ public class AutoAdminBean extends ControllerBean {
                     continue;
                 }
                 HtmlColumn column = (HtmlColumn) application.createComponent(HtmlColumn.COMPONENT_TYPE);
-//                <h:column>
-//                    <f:facet name="header"><h:outputText style="font-weight: bold;" value="Name"/></f:facet>
-//                    #{meeting.name}
-//                </h:column>
-                //column.getFacets().put("header", createOutputText(name, application, ));
                 addHeaderFacet(column, name);
 
                 HtmlOutputText output = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
                 output.setValueExpression("value",
                         application.getExpressionFactory().createValueExpression(elContext, "#{item." + name +"}", cmd.getType()));
-                determineNecessaryConverters(output, cmd.getType());
+                determineNecessaryConverters(output, cmd);
                 column.getChildren().add(output);
 
                 table.getChildren().add(column);
@@ -253,29 +249,7 @@ public class AutoAdminBean extends ControllerBean {
                     ValueExpression ve = application.getExpressionFactory().createValueExpression(elContext, "#{autoAdminBean.selected." + name + "}", cmd.getType());
                     input.setValueExpression("value", ve);
                     final String simpleName = cmd.getType().getSimpleName();
-                    if (!simpleName.equals("String")) {
-                        Converter converter = null;
-                        if (simpleName.equals("Date")) {
-                            DateTimeConverter dtc = (DateTimeConverter) application.createConverter("javax.faces.DateTime");
-                            dtc.setLocale(facesContext.getViewRoot().getLocale());
-                            dtc.setTimeZone(TimeZone.getDefault());
-                            if ("DATE".equals(cmd.getTemporalType())) {
-                                dtc.setType("date");
-                                dtc.setPattern("yyyy-MM-dd");
-                            } else if ("TIME".equals(cmd.getTemporalType())) {
-                                dtc.setType("time");
-                                dtc.setPattern("h:mm a");
-                            } else {
-                                dtc.setType("both");
-                                dtc.setPattern("yyyy-MM-dd HH:mm");
-                            }
-                            converter = dtc;
-                        } else {
-                            converter = application.createConverter("javax.faces." + simpleName);
-                        }
-                        input.setConverter(converter);
-
-                    }
+                    determineNecessaryConverters(input, cmd);
                     field = input;
                 }
 
@@ -292,23 +266,29 @@ public class AutoAdminBean extends ControllerBean {
         this.grid = (HtmlPanelGrid)grid;
     }
 
-    public HtmlCommandButton getCommandButton() {
-        if (this.commandButton == null) {
-            commandButton = (HtmlCommandButton) application.createComponent(HtmlCommandButton.COMPONENT_TYPE);
-            
-        }
-
-        return commandButton;
-    }
-
-    protected void determineNecessaryConverters(HtmlOutputText output, Class type) {
-        if (Date.class.equals(type)) {
-            DateTimeConverter dtc = (DateTimeConverter) application.createConverter("javax.faces.DateTime");
-            dtc.setDateStyle("short");
-            dtc.setTimeStyle("short");
-            dtc.setLocale(facesContext.getViewRoot().getLocale());
-            dtc.setTimeZone(TimeZone.getDefault());
-            output.setConverter(dtc);
+    protected void determineNecessaryConverters(UIOutput component, ColumnMetadata cmd) {
+        final String simpleName = cmd.getType().getSimpleName();
+        if (!"String".equals(simpleName)) {
+            Converter converter = null;
+            if (simpleName.equals("Date")) {
+                DateTimeConverter dtc = (DateTimeConverter) application.createConverter("javax.faces.DateTime");
+                dtc.setLocale(facesContext.getViewRoot().getLocale());
+                dtc.setTimeZone(TimeZone.getDefault());
+                if ("DATE".equals(cmd.getTemporalType())) {
+                    dtc.setType("date");
+                    dtc.setPattern("yyyy-MM-dd");
+                } else if ("TIME".equals(cmd.getTemporalType())) {
+                    dtc.setType("time");
+                    dtc.setPattern("h:mm a");
+                } else {
+                    dtc.setType("both");
+                    dtc.setPattern("yyyy-MM-dd HH:mm");
+                }
+                converter = dtc;
+            } else {
+                converter = application.createConverter("javax.faces." + simpleName);
+            }
+            component.setConverter(converter);
         }
     }
 
