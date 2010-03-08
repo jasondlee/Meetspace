@@ -18,7 +18,7 @@ public class ModelMetadata {
 
     public ModelMetadata(Class clazz) {
         this.clazz = clazz;
-        name = clazz.getName();
+        name = clazz.getSimpleName();
         displayName = name;
 
         determineFieldInformation();

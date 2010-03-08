@@ -1,6 +1,7 @@
 package com.steeplesoft.meetspace.autoadmin;
 
 import com.steeplesoft.meetspace.view.ControllerBean;
+import com.steeplesoft.meetspace.view.util.MeetspaceUtil;
 import com.sun.mojarra.scales.component.DateSelector;
 import com.sun.mojarra.scales.component.HtmlEditor;
 
@@ -17,6 +18,7 @@ import javax.faces.convert.DateTimeConverter;
 import javax.faces.model.DataModel;
 import javax.persistence.TemporalType;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -50,6 +52,7 @@ public class AutoAdminBean extends ControllerBean {
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
     private final Application application = facesContext.getApplication();
     private final ELContext elContext = facesContext.getELContext();
+    private Properties modelProperties;
 
     public AutoAdminBean() {
         modelClasses.add("Meeting");
@@ -164,6 +167,11 @@ public class AutoAdminBean extends ControllerBean {
     public ModelMetadata getModelMetadata() throws IllegalAccessException, InstantiationException {
         if (modelMetadata == null) {
             this.modelMetadata = new ModelMetadata(getModelClass());
+            this.modelProperties = new Properties();
+            try {
+                modelProperties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/autoadmin.properties"));
+            } catch (IOException e) {
+            }
         }
         return modelMetadata;
     }
@@ -220,12 +228,13 @@ public class AutoAdminBean extends ControllerBean {
             grid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
             grid.setColumns(2);
 
-            for (ColumnMetadata cmd : getModelMetadata().getColumns()) {
+            final ModelMetadata modelMetadata = getModelMetadata();
+            for (ColumnMetadata cmd : modelMetadata.getColumns()) {
                 String name = cmd.getName();
                 HtmlOutputLabel label = (HtmlOutputLabel) application.createComponent(HtmlOutputLabel.COMPONENT_TYPE);
                 label.setId("autoAdmin_label_" + name);
                 label.setFor("autoAdmin_" + name);
-                label.setValue(name + ":");
+                label.setValue(getLabel(modelMetadata.getName(), name) + ":");
                 label.setTitle("Label for " + name);
 
                 UIComponent field = null;
@@ -247,7 +256,7 @@ public class AutoAdminBean extends ControllerBean {
 
                     field = group;
                 } else {
-                    UIOutput component = createAppropriateComponent(cmd);
+                    UIOutput component = createAppropriateComponent(modelMetadata, cmd);
                     //(HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
                     ValueExpression ve = application.getExpressionFactory().createValueExpression(elContext, "#{autoAdminBean.selected." + name + "}", cmd.getType());
                     component.setValueExpression("value", ve);
@@ -265,34 +274,56 @@ public class AutoAdminBean extends ControllerBean {
         return grid;
     }
 
-    private UIOutput createAppropriateComponent(ColumnMetadata cmd) {
+    private String getLabel(String model, String field) {
+        String property = modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".label");
+        return (property != null) ? property : MeetspaceUtil.splitCamelCasedString(field);
+    }
+
+    private String getComponentType(String model, String field) {
+        String property = modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".inputType");
+        return property;
+    }
+
+    private boolean isHtmlEnabledField(String model, String field) {
+        return Boolean.parseBoolean(modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".html"));
+    }
+
+    private UIOutput createAppropriateComponent(ModelMetadata md, ColumnMetadata cmd) {
         UIOutput comp = null;
 
         if (facesContext.getViewRoot().getViewId().endsWith("form.xhtml")) {
-            if (cmd.getType().equals(String.class)) {
-                if (cmd.getLength() <= 255) {
+            String componentType = getComponentType(modelMetadata.getName(), cmd.getName());
+            if (componentType == null) {
+                if (cmd.getType().equals(String.class)) {
+                    if (cmd.getLength() <= 255) {
+                        comp = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+                    } else {
+                        HtmlEditor he = (HtmlEditor) application.createComponent(HtmlEditor.COMPONENT_TYPE);
+                        he.getAttributes().put("width", "100%");
+
+                        comp = he;
+                    }
+                } else if (cmd.getType().equals(Date.class)) {
+                    if (cmd.getTemporalType().equals(TemporalType.DATE)) {
+                        DateSelector ds = (DateSelector) application.createComponent(DateSelector.COMPONENT_TYPE);
+                        ds.setFormat("yyyy-MM-dd");
+                        comp = ds;
+                    } else {
+                        comp = //(Combo) application.createComponent(Combo.COMPONENT_TYPE);
+                                (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+                    }
+
+                } else {
                     comp = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
-                } else {
-                    HtmlEditor he = (HtmlEditor) application.createComponent(HtmlEditor.COMPONENT_TYPE);
-                    he.getAttributes().put("width", "100%");
-
-                    comp = he;
                 }
-            } else if (cmd.getType().equals(Date.class)) {
-                if (cmd.getTemporalType().equals(TemporalType.DATE)) {
-                    DateSelector ds = (DateSelector) application.createComponent(DateSelector.COMPONENT_TYPE);
-                    ds.setFormat("yyyy-MM-dd");
-                    comp = ds;
-                } else {
-                    comp = //(Combo) application.createComponent(Combo.COMPONENT_TYPE);
-                            (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
-                }
-
             } else {
-                comp = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+                comp = (UIOutput) application.createComponent(componentType);
             }
         } else {
             comp = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+            if (isHtmlEnabledField(modelMetadata.getName(), cmd.getName())) {
+                ((HtmlOutputText) comp).setEscape(false);
+            }
         }
 
         return comp;

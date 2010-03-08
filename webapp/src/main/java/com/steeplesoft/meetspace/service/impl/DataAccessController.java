@@ -23,7 +23,6 @@ import javax.transaction.UserTransaction;
  *
  * @author jasonlee
  */
-@Named("test")
 @SessionScoped
 public class DataAccessController implements Serializable {
 
