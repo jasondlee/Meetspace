@@ -11,6 +11,7 @@ import javax.enterprise.inject.Model;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UISelectItem;
 import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -55,11 +56,19 @@ public class AutoAdminBean extends ControllerBean {
     private Properties modelProperties;
 
     public AutoAdminBean() {
-        modelClasses.add("Meeting");
-        modelClasses.add("GroupMember");
-        modelClasses.add("Sponsor");
-
         modelPackages.add("com.steeplesoft.meetspace.model");
+        this.modelProperties = new Properties();
+        try {
+            modelProperties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/autoadmin.properties"));
+            String models = modelProperties.getProperty("autoadmin.models");
+            if (models != null) {
+                for (String model : models.split(",")) {
+                    modelClasses.add(model);
+                }
+            }
+        } catch (IOException e) {
+        }
+
     }
 
     @Override
@@ -167,17 +176,17 @@ public class AutoAdminBean extends ControllerBean {
     public ModelMetadata getModelMetadata() throws IllegalAccessException, InstantiationException {
         if (modelMetadata == null) {
             this.modelMetadata = new ModelMetadata(getModelClass());
-            this.modelProperties = new Properties();
-            try {
-                modelProperties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/autoadmin.properties"));
-            } catch (IOException e) {
-            }
         }
         return modelMetadata;
     }
 
     public void setModelMetadata(ModelMetadata modelMetadata) {
         this.modelMetadata = modelMetadata;
+    }
+
+    public String getModelLabel() {
+        String label = modelProperties.getProperty("autoadmin.model." + getModelClassName() +".label");
+        return (label != null) ? label : MeetspaceUtil.splitCamelCasedString(getModelClassName());
     }
 
 
@@ -238,6 +247,9 @@ public class AutoAdminBean extends ControllerBean {
                 label.setTitle("Label for " + name);
 
                 UIComponent field = null;
+                if (skipDisplay(modelMetadata.getName(), cmd.getName())) {
+                    continue;
+                }
                 if (cmd.getIsPrimaryKey()) {
                     HtmlPanelGroup group = (HtmlPanelGroup) application.createComponent(HtmlPanelGroup.COMPONENT_TYPE);
 
@@ -288,6 +300,12 @@ public class AutoAdminBean extends ControllerBean {
         return Boolean.parseBoolean(modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".html"));
     }
 
+    private boolean skipDisplay(String model, String field) {
+        String prop = modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".display");
+
+        return (prop != null) ? !Boolean.parseBoolean(prop) : Boolean.FALSE;
+    }
+
     private UIOutput createAppropriateComponent(ModelMetadata md, ColumnMetadata cmd) {
         UIOutput comp = null;
 
@@ -297,6 +315,7 @@ public class AutoAdminBean extends ControllerBean {
                 if (cmd.getType().equals(String.class)) {
                     if (cmd.getLength() <= 255) {
                         comp = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
+                        comp.getAttributes().put("style", "width: 100%");
                     } else {
                         HtmlEditor he = (HtmlEditor) application.createComponent(HtmlEditor.COMPONENT_TYPE);
                         he.getAttributes().put("width", "100%");
@@ -313,6 +332,15 @@ public class AutoAdminBean extends ControllerBean {
                                 (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
                     }
 
+                } else if (cmd.getType().equals(Boolean.class)) {
+                    HtmlSelectOneMenu menu = (HtmlSelectOneMenu) application.createComponent(HtmlSelectOneMenu.COMPONENT_TYPE);
+                    UISelectItem siFalse = (UISelectItem) application.createComponent(UISelectItem.COMPONENT_TYPE);
+                    siFalse.setItemValue(Boolean.FALSE);
+                    UISelectItem siTrue = (UISelectItem) application.createComponent(UISelectItem.COMPONENT_TYPE);
+                    siTrue.setItemValue(Boolean.TRUE);
+                    menu.getChildren().add(siFalse);
+                    menu.getChildren().add(siTrue);
+                    comp = menu;
                 } else {
                     comp = (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
                 }

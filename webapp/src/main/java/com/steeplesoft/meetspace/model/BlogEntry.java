@@ -32,9 +32,9 @@ public class BlogEntry implements Serializable {
     private Long id;
     @Column(nullable=false)
     private String title;
-    @Column(nullable=false)
+    @Column(nullable=false, length=Integer.MAX_VALUE)
     private String body;
-    @ManyToOne
+    @ManyToOne()
     private GroupMember postedBy;
     @Column
     @Temporal(TemporalType.TIMESTAMP)

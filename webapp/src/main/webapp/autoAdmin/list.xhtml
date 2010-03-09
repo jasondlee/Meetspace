@@ -15,7 +15,7 @@
         </f:metadata>
     </ui:define>
     <ui:define name="content">
-        <h:form id="autoAdminListForm">
+        <h:form id="autoAdminForm">
             <h:inputHidden id="modelClassName" value="#{autoAdminBean.modelClassName}"/>
             <h:outputLink value="form.jsf?model=#{autoAdminBean.modelClassName}">Add</h:outputLink>
             
@@ -31,9 +31,11 @@
                     <h:outputText value="#{autoAdminBean.paginator.pageFirstItem + 1} to #{autoAdminBean.paginator.pageLastItem + 1} of #{autoAdminBean.paginator.itemsCount}"/>
                     (
                     <h:selectOneMenu id="rowsPerPage" value="#{autoAdminBean.rowsPerPage}"
-                                     valueChangeListener="#{meeting.resetPagination}"
-                                     onchange="jsf.ajax.request(this, event, {execute: 'autoAdminListForm:rowsPerPage', render: 'autoAdminListForm'}); return false;">
+                                     valueChangeListener="#{autoAdminBean.resetPagination}"
+                                     onchange="jsf.ajax.request(this, event, {execute: 'autoAdminForm:rowsPerPage',render: 'autoAdminForm'}); return false;">
+                        <ui:remove>
                                      <f:ajax execute="@this" render="@form"/>
+                        </ui:remove>
                         <f:selectItem itemValue="5" />
                         <f:selectItem itemValue="10" />
                         <f:selectItem itemValue="15" />
@@ -47,7 +49,7 @@
                     </h:commandLink>
                 </div>
                 <script type="text/javascript">
-                    var width = document.getElementById("autoAdminListForm:table").clientWidth;
+                    var width = document.getElementById("autoAdminForm:table").clientWidth;
                     document.getElementById("prevdiv").style.width = (width/4)+"px";
                     document.getElementById("countdiv").style.width = (width/2)+"px";
                     document.getElementById("nextdiv").style.width = (width/4)+"px";

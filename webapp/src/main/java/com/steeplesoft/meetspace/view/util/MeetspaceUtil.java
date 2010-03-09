@@ -8,7 +8,7 @@ public class MeetspaceUtil {
         StringBuilder sb = new StringBuilder();
 
         // Find any leading word that begins with a lower case
-        Pattern firstWord = Pattern.compile("\\p{Lower}{1,}");
+        Pattern firstWord = Pattern.compile("^\\p{Lower}{1,}");
         Matcher m1 = firstWord.matcher(original);
         if (m1.find()) {
             String word = m1.group();

@@ -27,7 +27,7 @@
     <ui:define name="content">
         <h:messages layout="table"/>
 
-        <h1>Meetspace Auto Admin - #{autoAdminBean.modelClassName}</h1>
+        <h1>Meetspace Auto Admin - #{autoAdminBean.modelLabel}</h1>
         <h:form id="autoAdminForm">
             <h:inputHidden id="modelClassName" value="#{autoAdminBean.modelClassName}"/>
             <h:panelGrid id="grid" width="100%" binding="#{autoAdminBean.panelGrid}"/>
@@ -67,7 +67,7 @@
                 <br/>
             </ui:remove>
             <h:commandButton id="saveButton" action="#{autoAdminBean.save}"
-                             value="Save #{autoAdminBean.modelClassName}"/>
+                             value="Save #{autoAdminBean.modelLabel}"/>
             <h:commandButton id="cancelButton" action="list" value="Cancel"/>
         </h:form>
     </ui:define>
