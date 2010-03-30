@@ -1,7 +1,6 @@
 package com.steeplesoft.meetspace.autoadmin;
 
 import com.steeplesoft.meetspace.view.ControllerBean;
-import com.steeplesoft.meetspace.view.util.MeetspaceUtil;
 import com.sun.mojarra.scales.component.DateSelector;
 import com.sun.mojarra.scales.component.HtmlEditor;
 
@@ -17,9 +16,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.model.DataModel;
+import javax.inject.Inject;
 import javax.persistence.TemporalType;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -39,8 +38,12 @@ public class AutoAdminBean extends ControllerBean {
     public static final String NAV_LIST = "/autoAdmin/list";
     public static final String NAV_VIEW = "/autoAdmin/view";
 
-    private Set<String> modelPackages = new TreeSet<String>();
-    private Set<String> modelClasses = new TreeSet<String>();
+//    private Set<String> modelPackages = new TreeSet<String>();
+//    private Set<String> modelClasses = new TreeSet<String>();
+
+    @Inject
+    private MetaDataBuilder metaDataBuilder;
+
     private ModelMetadata modelMetadata;
     private Long id;
 
@@ -56,24 +59,11 @@ public class AutoAdminBean extends ControllerBean {
     private Properties modelProperties;
 
     public AutoAdminBean() {
-        modelPackages.add("com.steeplesoft.meetspace.model");
-        this.modelProperties = new Properties();
-        try {
-            modelProperties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/autoadmin.properties"));
-            String models = modelProperties.getProperty("autoadmin.models");
-            if (models != null) {
-                for (String model : models.split(",")) {
-                    modelClasses.add(model);
-                }
-            }
-        } catch (IOException e) {
-        }
-
     }
 
     @Override
     public Class<?> getEntityClass() {
-        return modelClass;
+        return modelMetadata.getModelClass();
     }
 
     public String getListViewId() {
@@ -93,7 +83,7 @@ public class AutoAdminBean extends ControllerBean {
     }
 
     public Set<String> getModelClasses() {
-        return modelClasses;
+        return metaDataBuilder.getModelClasses();
     }
 
     public String save() {
@@ -109,16 +99,17 @@ public class AutoAdminBean extends ControllerBean {
     }
 
     public void setModelClasses(Set<String> modelClasses) {
-        this.modelClasses = modelClasses;
+//        this.modelClasses = modelClasses;
     }
 
     public List getModelList() {
-        return new ArrayList(modelClasses);
+        return new ArrayList(metaDataBuilder.getModelClasses());
     }
 
     public Class<?> getModelClass() {
         if (modelClass == null) {
-            modelClass = loadModelClass(getModelClassName());
+            modelClass = metaDataBuilder.getModelMetadata(getModelClassName()).getModelClass();
+//            modelClass = loadModelClass(getModelClassName());
         }
         return modelClass;
     }
@@ -126,25 +117,6 @@ public class AutoAdminBean extends ControllerBean {
     public void setModelClass(Class<?> modelClass) {
         this.modelClass = modelClass;
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("modelClass", modelClass);
-    }
-
-    public Class loadModelClass(String className) {
-        Class clazz = null;
-
-        for (String pkg : modelPackages) {
-            try {
-                clazz = Class.forName(pkg + "." + className);
-                break;
-            } catch (ClassNotFoundException e) {
-                //
-            }
-        }
-
-        if (clazz == null) {
-            throw new RuntimeException("The class '" + className + "' could not be found in any of the configured packages.");
-        }
-
-        return clazz;
     }
 
 
@@ -161,7 +133,8 @@ public class AutoAdminBean extends ControllerBean {
         if (modelClassName == null) {
             modelClassName = (String) facesContext.getExternalContext().getRequestParameterMap().get("autoAdminForm:modelClassName");
             if (modelClassName != null) {
-                setModelClass(loadModelClass(modelClassName));
+                modelMetadata = metaDataBuilder.getModelMetadata(modelClassName);
+                setModelClass(modelMetadata.getModelClass());
             }
         }
         return modelClassName;
@@ -169,26 +142,18 @@ public class AutoAdminBean extends ControllerBean {
 
     public void setModelClassName(String modelClassName) {
         this.modelClassName = modelClassName;
-        setModelClass(loadModelClass(modelClassName));
+        modelMetadata = metaDataBuilder.getModelMetadata(modelClassName);
+//        setModelClass(loadModelClass(modelClassName));
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("modelClassName", modelClassName);
     }
 
-    public ModelMetadata getModelMetadata() throws IllegalAccessException, InstantiationException {
-        if (modelMetadata == null) {
-            this.modelMetadata = new ModelMetadata(getModelClass());
-        }
-        return modelMetadata;
+    public ModelMetadata getModelMetadata() {
+        return this.metaDataBuilder.getModelMetadata(getModelClassName());
     }
 
     public void setModelMetadata(ModelMetadata modelMetadata) {
-        this.modelMetadata = modelMetadata;
+//        this.modelMetadata = modelMetadata;
     }
-
-    public String getModelLabel() {
-        String label = modelProperties.getProperty("autoadmin.model." + getModelClassName() +".label");
-        return (label != null) ? label : MeetspaceUtil.splitCamelCasedString(getModelClassName());
-    }
-
 
     // Component-binding methods
 
@@ -243,11 +208,11 @@ public class AutoAdminBean extends ControllerBean {
                 HtmlOutputLabel label = (HtmlOutputLabel) application.createComponent(HtmlOutputLabel.COMPONENT_TYPE);
                 label.setId("autoAdmin_label_" + name);
                 label.setFor("autoAdmin_" + name);
-                label.setValue(getLabel(modelMetadata.getName(), name) + ":");
+                label.setValue(cmd.getLabel() + ":"); //getLabel(modelMetadata.getName(), name) + ":");
                 label.setTitle("Label for " + name);
 
                 UIComponent field = null;
-                if (skipDisplay(modelMetadata.getName(), cmd.getName())) {
+                if (cmd.isSkipDisplay()) {//skipDisplay(modelMetadata.getName(), cmd.getName())) {
                     continue;
                 }
                 if (cmd.getIsPrimaryKey()) {
@@ -286,31 +251,11 @@ public class AutoAdminBean extends ControllerBean {
         return grid;
     }
 
-    private String getLabel(String model, String field) {
-        String property = modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".label");
-        return (property != null) ? property : MeetspaceUtil.splitCamelCasedString(field);
-    }
-
-    private String getComponentType(String model, String field) {
-        String property = modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".inputType");
-        return property;
-    }
-
-    private boolean isHtmlEnabledField(String model, String field) {
-        return Boolean.parseBoolean(modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".html"));
-    }
-
-    private boolean skipDisplay(String model, String field) {
-        String prop = modelProperties.getProperty("autoadmin.model." + model + ".field." + field + ".display");
-
-        return (prop != null) ? !Boolean.parseBoolean(prop) : Boolean.FALSE;
-    }
-
     private UIOutput createAppropriateComponent(ModelMetadata md, ColumnMetadata cmd) {
         UIOutput comp = null;
 
         if (facesContext.getViewRoot().getViewId().endsWith("form.xhtml")) {
-            String componentType = getComponentType(modelMetadata.getName(), cmd.getName());
+            String componentType = cmd.getComponentType();//getComponentType(modelMetadata.getName(), cmd.getName());
             if (componentType == null) {
                 if (cmd.getType().equals(String.class)) {
                     if (cmd.getLength() <= 255) {
@@ -349,7 +294,7 @@ public class AutoAdminBean extends ControllerBean {
             }
         } else {
             comp = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-            if (isHtmlEnabledField(modelMetadata.getName(), cmd.getName())) {
+            if (cmd.isHtml()) {//isHtmlEnabledField(modelMetadata.getName(), cmd.getName())) {
                 ((HtmlOutputText) comp).setEscape(false);
             }
         }

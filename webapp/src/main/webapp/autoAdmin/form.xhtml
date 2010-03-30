@@ -27,47 +27,11 @@
     <ui:define name="content">
         <h:messages layout="table"/>
 
-        <h1>Meetspace Auto Admin - #{autoAdminBean.modelLabel}</h1>
+        <h1>Meetspace Auto Admin - #{autoAdminBean.modelMetadata.displayName}</h1>
         <h:form id="autoAdminForm">
             <h:inputHidden id="modelClassName" value="#{autoAdminBean.modelClassName}"/>
             <h:panelGrid id="grid" width="100%" binding="#{autoAdminBean.panelGrid}"/>
-            <ui:remove>
-                <ui:repeat id="fields" value="#{autoAdminBean.modelMetadata.columns}" var="cmd">
-                    <h:outputText id="autoAdminForm_#{cmd.name}_label" value="#{cmd.name}"
-                                  style="width: 15%; display: block; float: left;"/>
-                    <ui:fragment id="key" rendered="#{cmd.isPrimaryKey and empty autoAdminBean.selected.id}">
-                        <h:outputText value="#{autoAdminBean.selected[cmd.name]}"/>
-                        <h:inputHidden value="#{autoAdminBean.selected[cmd.name]}"/>
-                    </ui:fragment>
-                    <ui:fragment id="nonkey" rendered="#{!cmd.isPrimaryKey}">
-                        <h:inputText id="string" value="#{autoAdminBean.selected[cmd.name]}"
-                                     rendered="#{cmd.type.simpleName == 'String'}"/>
-                        <sc:dateSelector id="date" value="#{autoAdminBean.selected[cmd.name]}"
-                                         rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'DATE')}"
-                                         format="yyyy-MM-dd"/>
-                        <h:inputText id="time" value="#{autoAdminBean.selected[cmd.name]}"
-                                     rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIME')}"
-                                     size="9" maxlength="8">
-                            <f:convertDateTime type="date" pattern="h:mm a"/>
-                        </h:inputText>
-                        <h:inputText id="datetime" value="#{autoAdminBean.selected[cmd.name]}"
-                                     rendered="#{(cmd.type.simpleName == 'Date') and (cmd.temporalType == 'TIMESTAMP')}"
-                                     size="19" maxlength="18">
-                            <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm"/>
-                        </h:inputText>
-                        <h:selectOneListbox id="boolean" value="#{autoAdminBean.selected[cmd.name]}"
-                                            rendered="#{cmd.type.simpleName == 'Boolean'}" size="1">
-                            <f:selectItem itemValue="" itemLabel=""/>
-                            <f:selectItem itemValue="true" itemLabel="True"/>
-                            <f:selectItem itemValue="false" itemLabel="False"/>
-                        </h:selectOneListbox>
-                    </ui:fragment>
-                    <br/>
-                </ui:repeat>
-                <br/>
-            </ui:remove>
-            <h:commandButton id="saveButton" action="#{autoAdminBean.save}"
-                             value="Save #{autoAdminBean.modelLabel}"/>
+            <h:commandButton id="saveButton" action="#{autoAdminBean.save}" value="Save #{autoAdminBean.modelMetadata.displayName}"/>
             <h:commandButton id="cancelButton" action="list" value="Cancel"/>
         </h:form>
     </ui:define>
