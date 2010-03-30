@@ -1,6 +1,9 @@
 package com.steeplesoft.meetspace.autoadmin;
 
+import com.steeplesoft.meetspace.service.impl.DataAccessController;
 import com.steeplesoft.meetspace.view.ControllerBean;
+import com.steeplesoft.meetspace.view.util.JsfUtil;
+import com.steeplesoft.meetspace.view.util.Paginator;
 import com.sun.mojarra.scales.component.DateSelector;
 import com.sun.mojarra.scales.component.HtmlEditor;
 
@@ -15,24 +18,18 @@ import javax.faces.component.html.*;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.persistence.TemporalType;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jasonlee
- * Date: Feb 27, 2010
- * Time: 8:22:51 AM
- * To change this template use File | Settings | File Templates.
- */
-//@Named
-//@SessionScoped
 @Model
-public class AutoAdminBean extends ControllerBean {
+public class AutoAdminBean {
     public static final String NAV_BASE = "/autoAdmin";
+    public static final String NAV_REDIRECT = "&faces-redirect=true";
     public static final String NAV_ADD = "/autoAdmin/form";
     public static final String NAV_EDIT = "/autoAdmin/form";
     public static final String NAV_LIST = "/autoAdmin/list";
@@ -46,6 +43,13 @@ public class AutoAdminBean extends ControllerBean {
 
     private ModelMetadata modelMetadata;
     private Long id;
+
+    @Inject
+    protected DataAccessController dataAccess;
+    protected Object current;
+    protected Paginator paginator;
+    protected int rowsPerPage = 5;
+    protected DataModel dataModel;
 
     private String modelClassName;
     private Class<?> modelClass;
@@ -61,41 +65,111 @@ public class AutoAdminBean extends ControllerBean {
     public AutoAdminBean() {
     }
 
-    @Override
     public Class<?> getEntityClass() {
         return modelMetadata.getModelClass();
-    }
-
-    public String getListViewId() {
-        return NAV_LIST + "?model=" + getModelClassName();
-    }
-
-    public String getAddViewId() {
-        return NAV_ADD;
-    }
-
-    public String getEditViewId() {
-        return NAV_EDIT;
-    }
-
-    public String getViewViewId() {
-        return NAV_VIEW;
     }
 
     public Set<String> getModelClasses() {
         return metaDataBuilder.getModelClasses();
     }
 
+    public Paginator getPaginator() {
+        if (paginator == null) {
+            paginator = new Paginator(rowsPerPage) {
+
+                @Override
+                public int getItemsCount() {
+                    return dataAccess.count(getEntityClass());
+                }
+
+                @Override
+                public DataModel createPageDataModel() {
+                    return new ListDataModel(dataAccess.findRange(getEntityClass(), getPageFirstItem(), getPageFirstItem()+getPageSize()));
+                }
+            };
+        }
+
+        return paginator;
+
+    }
+
+    public void next() {
+        getPaginator().nextPage();
+        resetList();
+    }
+
+    public void previous() {
+        getPaginator().previousPage();
+        resetList();
+    }
+
+    public int getRowsPerPage() {
+        return rowsPerPage;
+    }
+
+    public void setRowsPerPage(int rowsPerPage) {
+        this.rowsPerPage = rowsPerPage;
+        resetList();
+    }
+
+    public DataModel getList() {
+        if (dataModel == null) {
+            dataModel = getPaginator().createPageDataModel();
+        }
+
+        return dataModel;
+    }
+
+    public void resetList() {
+        dataModel = null;
+    }
+
+    public void resetPagination(ValueChangeEvent vce) {
+        paginator = null;
+    }
+
     public String save() {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("modelClassName", modelClassName);
-        String ret = null;
-        if (id == null) {
-            ret = create();
-        } else {
-            ret = edit();
+        String ret = NAV_LIST + "?model=" + getModelClassName() + NAV_REDIRECT;
+        try {
+            if (id == null) {
+                dataAccess.create(getSelected());
+//            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GroupMemberCreated")); // Left as an example :)
+                JsfUtil.addSuccessMessage("Group member created");
+                return NAV_LIST + NAV_REDIRECT;
+            } else {
+                dataAccess.edit(getSelected());
+                JsfUtil.addSuccessMessage("Group member updated");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsfUtil.addErrorMessage(e, "A persistence error occurred.");
+            ret = null;
         }
 
         return ret;
+    }
+
+    public Object getSelected() {
+        if (current == null) {
+            setSelected(newEntityInstance());
+//            selectedItemIndex = -1;
+        }
+        return current;
+    }
+
+    public void setSelected(Object selected) {
+        this.current = selected;
+    }
+
+    protected Object newEntityInstance() {
+        Object obj = null;
+        try {
+            obj = getEntityClass().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 
     public void setModelClasses(Set<String> modelClasses) {
@@ -126,7 +200,7 @@ public class AutoAdminBean extends ControllerBean {
 
     public void setId(Long id) {
         this.id = id;
-        setSelected(dataAccess.find(getModelClass(), id));
+        this.current = dataAccess.find(getModelClass(), id);
     }
 
     public String getModelClassName() {
