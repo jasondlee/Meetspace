@@ -273,7 +273,7 @@ public class MultipartMap extends HashMap<String, Object> {
         }
 
         // Write uploaded file.
-        File file = File.createTempFile(prefix + "_", suffix, new File(location));
+        File file = File.createTempFile(prefix + "_", suffix);//, new File(location));
         if (multipartConfigured) {
             part.write(file.getName()); // Will be written to the very same File.
         } else {
