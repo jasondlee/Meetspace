@@ -11,26 +11,32 @@ import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 
 public abstract class ControllerBean implements Serializable {
-    public static String NAV_REDIRECT = "&faces-redirect=true";
+    public static String NAV_REDIRECT = "?faces-redirect=true";
+
+    private String NAV_ADD  = "/admin/attachments/form";
+    private String NAV_EDIT = "/admin/attachments/form";
+    private String NAV_LIST = "/admin/attachments/list";
+    private String NAV_VIEW = "/admin/attachments/view";
 
     @Inject
-    protected DataAccessController dataAccess;
-    protected DataModel dataModel;
-    protected int rowsPerPage = 5;
-    protected int selectedItemIndex = -1;
-    protected Object current;
-    protected Paginator paginator;
+    private DataAccessController dataAccess;
+    private DataModel dataModel;
+    private int rowsPerPage = 5;
+    private int selectedItemIndex = -1;
+    private Object current;
+    private Paginator paginator;
 
     //**************************************************************************
     // Abstract methods
 
-    public abstract String getListViewId();
-    public abstract String getAddViewId();
-    public abstract String getEditViewId();
-    public abstract String getViewViewId(); // ick
-
     public abstract Class getEntityClass();
 
+    protected void setNavigationIds(String add, String edit, String list, String view) {
+        this.NAV_ADD = add;
+        this.NAV_EDIT = edit;
+        this.NAV_LIST = list;
+        this.NAV_VIEW = view;
+    }
 
     public int getRowsPerPage() {
         return rowsPerPage;
@@ -85,7 +91,7 @@ public abstract class ControllerBean implements Serializable {
     // prepareFoo and Foo action methods
     public String prepareList() {
         resetList();
-        return getListViewId() + NAV_REDIRECT;
+        return NAV_LIST + NAV_REDIRECT;
     }
 
     public DataModel getList() {
@@ -99,7 +105,7 @@ public abstract class ControllerBean implements Serializable {
     public String prepareCreate() {
         setSelected(newEntityInstance());
         selectedItemIndex = -1;
-        return getAddViewId() + NAV_REDIRECT;
+        return NAV_ADD;// + NAV_REDIRECT;
     }
 
     public String create() {
@@ -107,7 +113,7 @@ public abstract class ControllerBean implements Serializable {
             dataAccess.create(getSelected());
 //            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GroupMemberCreated")); // Left as an example :)
             JsfUtil.addSuccessMessage("Group member created");
-            return getListViewId() + NAV_REDIRECT;
+            return NAV_LIST + NAV_REDIRECT;
         } catch (Exception e) {
             e.printStackTrace();
             JsfUtil.addErrorMessage(e, "A persistence error occurred.");
@@ -118,14 +124,14 @@ public abstract class ControllerBean implements Serializable {
     public String prepareEdit() {
         setSelected(getList().getRowData());
         selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
-        return getEditViewId() + NAV_REDIRECT;
+        return NAV_EDIT;// + NAV_REDIRECT;
     }
 
     public String edit() {
         try {
             dataAccess.edit(getSelected());
             JsfUtil.addSuccessMessage("Group member updated");
-            return getListViewId() + NAV_REDIRECT;
+            return NAV_EDIT + NAV_REDIRECT;
         } catch (Exception e) {
            JsfUtil.addErrorMessage(e, "A persistence error occurred.");
             e.printStackTrace();
@@ -143,13 +149,13 @@ public abstract class ControllerBean implements Serializable {
             JsfUtil.addErrorMessage(e, "A persistence error occurred.");
         }
         resetList();
-        return getListViewId() + NAV_REDIRECT;
+        return NAV_LIST + NAV_REDIRECT;
     }
 
     public String prepareView() {
         setSelected(getList().getRowData());
         selectedItemIndex = paginator.getPageFirstItem() + getList().getRowIndex();
-        return getViewViewId() + NAV_REDIRECT;
+        return NAV_VIEW + NAV_REDIRECT;
     }
 
     public String checkViewData() {
@@ -160,9 +166,9 @@ public abstract class ControllerBean implements Serializable {
         }
 
         if (current != null) {
-            return getViewViewId() + NAV_REDIRECT;
+            return NAV_VIEW + NAV_REDIRECT;
         } else {
-            return getListViewId() + NAV_REDIRECT;
+            return NAV_LIST + NAV_REDIRECT;
         }
     }
 

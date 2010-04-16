@@ -25,6 +25,10 @@ public class MeetingBean extends ControllerBean {
     public static final String NAV_LIST = "/admin/meetings/list";
     public static final String NAV_VIEW = "/admin/meetings/view";
 
+    public MeetingBean() {
+        setNavigationIds(NAV_ADD, NAV_EDIT, NAV_LIST, NAV_VIEW);
+    }
+
     @Inject
     private MeetingService meetingService;
     private Meeting nextMeeting = null;
@@ -43,19 +47,6 @@ public class MeetingBean extends ControllerBean {
 
     public void setMeetingService(MeetingService meetingService) {
         this.meetingService = meetingService;
-    }
-
-    public String getListViewId() {
-        return NAV_LIST;
-    }
-    public String getAddViewId() {
-        return NAV_ADD;
-    }
-    public String getEditViewId() {
-        return NAV_EDIT;
-    }
-    public String getViewViewId() {
-        return NAV_VIEW;
     }
 
     @Override

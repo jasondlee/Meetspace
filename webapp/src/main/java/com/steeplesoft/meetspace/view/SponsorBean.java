@@ -24,22 +24,18 @@ public class SponsorBean extends ControllerBean {
 
     public static final String NAV_VIEW = "/admin/sponsors/view";
 
-    @Override
     public String getListViewId() {
         return NAV_LIST;
     }
 
-    @Override
     public String getAddViewId() {
         return NAV_ADD;
     }
 
-    @Override
     public String getEditViewId() {
         return NAV_EDIT;
     }
 
-    @Override
     public String getViewViewId() {
         return NAV_VIEW;
     }

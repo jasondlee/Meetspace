@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.steeplesoft.meetspace.model;
 
 import java.io.Serializable;
@@ -23,22 +22,29 @@ import javax.persistence.TemporalType;
  * @author jasonlee
  */
 @Entity
-@Table(name="blog_entry")
-@TableGenerator(table="pk_gen", name="BLOG_GEN")
+@Table(name = "blog_entry")
+@TableGenerator(table = "pk_gen", name = "BLOG_GEN")
 public class BlogEntry implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(nullable=false)
+
+    @Column(nullable = false)
     private String title;
-    @Column(nullable=false, length=Integer.MAX_VALUE)
+
+    @Column(nullable = false, length = Integer.MAX_VALUE)
     private String body;
+
     @ManyToOne()
     private GroupMember postedBy;
+
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date postedDate;
+
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
@@ -115,5 +121,4 @@ public class BlogEntry implements Serializable {
     public String toString() {
         return "com.steeplesoft.meetspace.model.BlogEntry[id=" + id + "]";
     }
-
 }

@@ -47,9 +47,9 @@
         <facestester.version>0.4-SNAPSHOT</facestester.version>
         <jsf.version>2.0.2</jsf.version>
 
-        <weld.api.version>1.0-SNAPSHOT</weld.api.version>
-        <weld.core.version>1.0.0-SNAPSHOT</weld.core.version>
-        <weld.extensions.version>1.0.0-SNAPSHOT</weld.extensions.version>
+        <weld.api.version>1.0</weld.api.version>
+        <weld.core.version>1.0.1-Final</weld.core.version>
+        <weld.extensions.version>1.0.0</weld.extensions.version>
 
         <debug>true</debug>
         <compile.optimize>false</compile.optimize>

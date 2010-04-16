@@ -270,9 +270,9 @@ public class AutoAdminBean {
 
     public HtmlPanelGrid getPanelGrid() throws IllegalAccessException, InstantiationException {
         if (grid == null) {
-            final FacesContext facesContext = FacesContext.getCurrentInstance();
-            final Application application = facesContext.getApplication();
-            final ELContext elContext = facesContext.getELContext();
+//            final FacesContext facesContext = FacesContext.getCurrentInstance();
+//            final Application application = facesContext.getApplication();
+//            final ELContext elContext = facesContext.getELContext();
             grid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
             grid.setColumns(2);
 
@@ -282,11 +282,11 @@ public class AutoAdminBean {
                 HtmlOutputLabel label = (HtmlOutputLabel) application.createComponent(HtmlOutputLabel.COMPONENT_TYPE);
                 label.setId("autoAdmin_label_" + name);
                 label.setFor("autoAdmin_" + name);
-                label.setValue(cmd.getLabel() + ":"); //getLabel(modelMetadata.getName(), name) + ":");
+                label.setValue(cmd.getLabel() + ":");
                 label.setTitle("Label for " + name);
 
                 UIComponent field = null;
-                if (cmd.isSkipDisplay()) {//skipDisplay(modelMetadata.getName(), cmd.getName())) {
+                if (cmd.isSkipDisplay()) {
                     continue;
                 }
                 if (cmd.getIsPrimaryKey()) {
@@ -350,7 +350,6 @@ public class AutoAdminBean {
                         comp = //(Combo) application.createComponent(Combo.COMPONENT_TYPE);
                                 (HtmlInputText) application.createComponent(HtmlInputText.COMPONENT_TYPE);
                     }
-
                 } else if (cmd.getType().equals(Boolean.class)) {
                     HtmlSelectOneMenu menu = (HtmlSelectOneMenu) application.createComponent(HtmlSelectOneMenu.COMPONENT_TYPE);
                     UISelectItem siFalse = (UISelectItem) application.createComponent(UISelectItem.COMPONENT_TYPE);
