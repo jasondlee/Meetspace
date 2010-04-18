@@ -45,21 +45,8 @@ public class Attachment implements Serializable {
     @Column(nullable = false)
     private String path;
 
-    @Lob
-    @Basic
-    @Column(length = Integer.MAX_VALUE)
-    private byte[] content;
-
     @ManyToOne
     private BlogEntry owner;
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
 
     public String getDescription() {
         return description;
