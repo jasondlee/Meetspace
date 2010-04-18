@@ -42,8 +42,12 @@ public class Attachment implements Serializable {
     @Column(nullable = false)
     private String mimeType;
 
+    @Column(nullable = false)
+    private String path;
+
     @Lob
     @Basic
+    @Column(length = Integer.MAX_VALUE)
     private byte[] content;
 
     @ManyToOne
@@ -103,5 +107,13 @@ public class Attachment implements Serializable {
 
     public void setOwner(BlogEntry owner) {
         this.owner = owner;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

@@ -38,7 +38,7 @@
     <orderEntry type="module" module-name="plugin-api" exported="" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.faces:jsf-api:2.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.faces:jsf-impl:2.0.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:6.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.enterprise:cdi-api:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.interceptor:jboss-interceptor-api:1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
@@ -47,6 +47,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-lang:commons-lang:2.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.steeplesoft.jsf.facestester:facestester-connector-mojarra-jsf2.0:0.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.steeplesoft.jsf.facestester:facestester-core:0.4-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.el:el-api:2.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.persistence:persistence-api:1.0" level="project" />

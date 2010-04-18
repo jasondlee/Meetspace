@@ -4,7 +4,9 @@ import com.steeplesoft.meetspace.plugins.engine.JsfPluginEngine;
 import com.steeplesoft.meetspace.plugins.engine.ClassloaderPluginEngine;
 import com.steeplesoft.meetspace.plugins.PluginMetadata;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +17,12 @@ import java.util.List;
 public class PluginBean {
     private ClassloaderPluginEngine pe;
 
-    public PluginBean() throws IOException {
-        String home = System.getenv("MEETSPACE_HOME");
-        if (home == null) {
-            home = System.getProperty("user.home") + File.separator + ".meetspace";
-        }
-        pe = new ClassloaderPluginEngine(home + File.separatorChar + "/plugins", "com.steeplesoft.meetspace.plugins");
+    @Inject
+    private MeetSpaceBean meetspaceBean;
+
+    @PostConstruct
+    public void init() throws IOException {
+        pe = new ClassloaderPluginEngine(meetspaceBean.getHome() + File.separatorChar + "/plugins", "com.steeplesoft.meetspace.plugins");
     }
 
     public List<Object> getPlugins(String type) {

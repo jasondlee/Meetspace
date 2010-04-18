@@ -204,12 +204,12 @@ public class MultipartMap extends HashMap<String, Object> {
      * @return Uploaded file associated with given request parameter name.
      * @throws IllegalArgumentException If this field is actually a Text field.
      */
-    public File getFile(String name) {
+    public FileHolder getFile(String name) {
         Object value = super.get(name);
         if (value instanceof String[]) {
             throw new IllegalArgumentException("This is a Text field. Use #getParameter() instead.");
         }
-        return (File) value;
+        return (FileHolder) value;
     }
 
     // Helpers ------------------------------------------------------------------------------------
@@ -273,6 +273,8 @@ public class MultipartMap extends HashMap<String, Object> {
         }
 
         // Write uploaded file.
+        // TODO: Let's store the bytes instead?  Maybe put it a wrapper class
+        // to store filename and mime type as well file contents.
         File file = File.createTempFile(prefix + "_", suffix);//, new File(location));
         if (multipartConfigured) {
             part.write(file.getName()); // Will be written to the very same File.
@@ -292,7 +294,7 @@ public class MultipartMap extends HashMap<String, Object> {
             }
         }
 
-        put(part.getName(), file);
+        put(part.getName(), new FileHolder(file, filename, part.getContentType()));
         part.delete(); // Cleanup temporary storage.
     }
 

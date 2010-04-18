@@ -4,6 +4,7 @@
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.xhtml</param-value>
     </context-param>
+    <!--
     <filter>
         <filter-name>MultipartFilter</filter-name>
         <filter-class>com.steeplesoft.meetspace.util.upload.MultipartFilter</filter-class>
@@ -13,6 +14,7 @@
         <servlet-name>Faces Servlet</servlet-name>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
+    -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>

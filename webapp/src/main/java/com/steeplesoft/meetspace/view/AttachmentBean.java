@@ -5,18 +5,18 @@
 package com.steeplesoft.meetspace.view;
 
 import com.steeplesoft.meetspace.model.Attachment;
-import java.util.Iterator;
-import java.util.List;
+import com.steeplesoft.meetspace.util.upload.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  *
@@ -34,6 +34,9 @@ public class AttachmentBean extends ControllerBean {
 
     public static final String NAV_VIEW = "/admin/attachments/view";
 
+    @Inject
+    private MeetSpaceBean meetspaceBean;
+
     public AttachmentBean() {
         setNavigationIds(NAV_ADD, NAV_EDIT, NAV_LIST, NAV_VIEW);
     }
@@ -47,34 +50,21 @@ public class AttachmentBean extends ControllerBean {
     public String create() {
         try {
             System.out.println("create");
-            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            // Create a factory for disk-based file items
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            // Set factory constraints
-            //        factory.setSizeThreshold(yourMaxMemorySize);
-            //        factory.setRepository(yourTempDirectory);
-            // Create a new file upload handler
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            // Set overall request size constraint
-            upload.setSizeMax(49152);
-            // Parse the request
-            /* FileItem */
-            List items = upload.parseRequest(request);
-            Iterator iter = items.iterator();
-            if (iter.hasNext()) {
-                FileItem item = (FileItem) iter.next();
+            //HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            MultipartRequest request = (MultipartRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            String uploadPath = meetspaceBean.getHome() + File.separator + "uploads";
 
-                if (!item.isFormField()) {
-                    Attachment attachment = (Attachment)getSelected();
+            Attachment attachment = (Attachment) getSelected();
+            FileHolder item = request.getFile("contents");
 
-                    attachment.setFilename(item.getName());
-                    attachment.setMimeType(item.getContentType());
-                    attachment.setContent(item.get());
-                }
-            }
-        return super.create();
-        } catch (FileUploadException ex) {
+            attachment.setFilename(item.getFileName());
+            attachment.setMimeType(item.getMimeType());
+            attachment.setPath(uploadPath + item.getFileName());
+            copyFile(item.getFile(), uploadPath, item.getFileName());
+//            attachment.setContent(getFileContents(item.getFile()));
+
+            return super.create();
+        } catch (Exception ex) {
             Logger.getLogger(AttachmentBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -85,5 +75,40 @@ public class AttachmentBean extends ControllerBean {
     public String edit() {
         System.out.println("edit");
         return super.edit();
+    }
+
+    protected void copyFile(File source, String dir, String fileName) {
+        final File targetDir = new File(dir);
+        targetDir.mkdirs();
+        final File target = new File(targetDir, fileName);
+        source.renameTo(target);
+    }
+
+    protected byte[] getFileContents(File file) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+            long length = file.length();
+            byte[] bytes = new byte[8192];
+            // Read in the bytes
+            int numRead = is.read(bytes);
+            while (numRead >= 0) {
+                baos.write(bytes);
+                bytes = new byte[8192];
+                numRead = is.read(bytes);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AttachmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (Exception e) {
+                //
+            }
+        }
+        return baos.toByteArray();
     }
 }

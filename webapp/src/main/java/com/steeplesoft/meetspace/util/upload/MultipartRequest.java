@@ -82,7 +82,7 @@ public class MultipartRequest extends HttpServletRequestWrapper {
     /**
      * @see MultipartMap#getFile(String)
      */
-    public File getFile(String name) {
+    public FileHolder getFile(String name) {
         return multipartMap.getFile(name);
     }
 
