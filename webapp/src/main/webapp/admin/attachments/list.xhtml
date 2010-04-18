@@ -22,7 +22,7 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header"><h:outputText style="font-weight: bold;" value="Mime Type"/></f:facet>
-                    #{attachment.mimetype}
+                    #{attachment.mimeType}
                 </h:column>
                 <h:column>
                     <f:facet name="header"><h:outputText style="font-weight: bold;" value="Attached To"/></f:facet>
@@ -37,7 +37,7 @@
                     <h:commandLink action="#{attachmentBean.prepareEdit}" value="Edit"/>
                     &nbsp;
                     <h:commandLink action="#{attachmentBean.delete}" value="Delete"
-                                   onclick="return confirm('Are you sure you want to delete #{attachment.firstName} #{attachment.lastName}?');" >
+                                   onclick="return confirm('Are you sure you want to delete #{attachment.title}?');" >
                         <f:ajax execute="@this" render="@form"/>
                     </h:commandLink>
                 </h:column>
