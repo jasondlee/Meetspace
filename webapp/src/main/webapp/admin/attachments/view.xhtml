@@ -2,22 +2,32 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sc="http://java.sun.com/mojarra/scales"
       template="/themes/#{main.preferences['theme'].value}/layout.xhtml">
     <ui:define name="content">
-            <h:form id="memberForm">
+            <h:form id="attachmentForm">
                 <h:panelGrid columns="2">
-                    <h:outputLabel value="First Name" for="firstName" />
-                    <h:outputText id="firstName" value="#{memberBean.selected.firstName}" title="First Name" />
+                    <h:outputLabel value="Title" for="title" />
+                    <h:outputText id="title" value="#{attachmentBean.selected.title}" title="Title" />
 
-                    <h:outputLabel value="Last Name" for="lastName" />
-                    <h:outputText id="lastName" value="#{memberBean.selected.lastName}" title="Last Name" />
+                    <h:outputLabel value="Description" for="description" />
+                    <h:outputText id="description" value="#{attachmentBean.selected.description}" title="Description" />
 
-                    <h:outputLabel value="Email Address" for="emailAddress" />
-                    <h:outputText id="emailAddress" value="#{memberBean.selected.emailAddress}" title="Email Address" />
+                    <h:outputLabel value="File" for="file" />
+                    <h:panelGroup>
+                        <h:outputText id="file" value="A link to allow the file DL here? Display images inline?" />
+                        <sc:download rendered="#{attachmentBean.selected.mimeType.startsWith('image')}"
+                                     data="#{attachmentBean.selected.content}"
+                                     mimeType="#{attachmentBean.selected.mimeType}"
+                                     fileName="#{attachmentBean.selected.fileName}"
+                                     urlVar="image">
+                            <h:graphicImage url="#{image}" width="100%"/>
+                        </sc:download>
+                    </h:panelGroup>
                 </h:panelGrid>
                 <h:commandLink action="form" value="Edit"/>&#160;
-                <h:commandLink action="#{memberBean.prepareCreate}" value="Add New"/>&#160;
-                <h:commandLink action="#{memberBean.prepareList}" value="Member List" immediate="true"/>&#160;
+                <h:commandLink action="#{attachmentBean.prepareCreate}" value="Add New"/>&#160;
+                <h:commandLink action="#{attachmentBean.prepareList}" value="Attachment List" immediate="true"/>&#160;
             </h:form>
     </ui:define>
 </ui:composition>

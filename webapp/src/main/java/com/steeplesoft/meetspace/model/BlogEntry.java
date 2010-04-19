@@ -4,32 +4,28 @@
  */
 package com.steeplesoft.meetspace.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
- *
  * @author jasonlee
  */
 @Entity
 @Table(name = "blog_entry")
-@TableGenerator(table = "pk_gen", name = "BLOG_GEN")
+@NamedQueries({
+        @NamedQuery(name = "BlogEntry.findAll", query = "SELECT be FROM BlogEntry be"),
+        @NamedQuery(name = "BlogEntry.findById", query = "SELECT be FROM BlogEntry be WHERE be.id = :id"),
+        @NamedQuery(name = "BlogEntry.findSticky", query = "SELECT be FROM BlogEntry be where be.isSticky = true ORDER by be.postedDate desc"),
+        @NamedQuery(name = "BlogEntry.mostRecent", query = "SELECT be FROM BlogEntry be where be.isSticky = false ORDER by be.postedDate desc ")
+})
+//@EntityListeners({BlogEntryListener.class})
 public class BlogEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -38,8 +34,11 @@ public class BlogEntry implements Serializable {
     @Column(nullable = false, length = Integer.MAX_VALUE)
     private String body;
 
+    @Column
+    private Boolean isSticky;
+
     @ManyToOne()
-    private GroupMember postedBy;
+    private BlogEntry postedBy;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
@@ -73,11 +72,11 @@ public class BlogEntry implements Serializable {
         this.modifiedDate = modifiedDate;
     }
 
-    public GroupMember getPostedBy() {
+    public BlogEntry getPostedBy() {
         return postedBy;
     }
 
-    public void setPostedBy(GroupMember postedBy) {
+    public void setPostedBy(BlogEntry postedBy) {
         this.postedBy = postedBy;
     }
 
@@ -95,6 +94,14 @@ public class BlogEntry implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Boolean getIsSticky() {
+        return isSticky;
+    }
+
+    public void setIsSticky(Boolean sticky) {
+        this.isSticky = sticky;
     }
 
     @Override
@@ -120,5 +127,17 @@ public class BlogEntry implements Serializable {
     @Override
     public String toString() {
         return "com.steeplesoft.meetspace.model.BlogEntry[id=" + id + "]";
+    }
+
+    @PrePersist
+    public void prePersist() {
+        Date date = new Date();
+        setPostedDate(date);
+        setModifiedDate(date);
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        setModifiedDate(new Date());
     }
 }

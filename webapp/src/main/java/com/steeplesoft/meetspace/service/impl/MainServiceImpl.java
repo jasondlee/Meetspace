@@ -5,6 +5,7 @@
 
 package com.steeplesoft.meetspace.service.impl;
 
+import com.steeplesoft.meetspace.model.BlogEntry;
 import com.steeplesoft.meetspace.model.GroupMember;
 import com.steeplesoft.meetspace.model.Registration;
 import com.steeplesoft.meetspace.model.Sponsor;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 import java.io.Serializable;
 import java.util.List;
@@ -69,7 +71,7 @@ public class MainServiceImpl implements MainService {
     }
 
     public List<GroupMember> getMembers() {
-        return em.createNamedQuery("allMembers").getResultList();
+        return em.createNamedQuery("GroupMember.findAll").getResultList();
     }
 
     @Override
@@ -82,5 +84,15 @@ public class MainServiceImpl implements MainService {
         }
 
         return sponsor;
+    }
+
+    public List<BlogEntry> getMostRecentBlogEntries(int max) {
+        final List results = em.createNamedQuery("BlogEntry.findSticky").setMaxResults(max).getResultList();
+        int recentMax = max - results.size();
+        if (recentMax <= max) {
+            final List recentQuery = em.createNamedQuery("BlogEntry.mostRecent").setMaxResults(recentMax).getResultList();
+            results.addAll(recentQuery);
+        }
+        return results;
     }
 }

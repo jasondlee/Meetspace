@@ -5,11 +5,13 @@
 
 package com.steeplesoft.meetspace.view;
 
+import com.steeplesoft.meetspace.model.BlogEntry;
 import com.steeplesoft.meetspace.model.Preference;
 import com.steeplesoft.meetspace.model.Sponsor;
 import com.steeplesoft.meetspace.service.MainService;
 import com.steeplesoft.meetspace.service.PreferencesService;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -53,5 +55,9 @@ public class MainBean implements Serializable {
 
     public Sponsor getRandomSponsor() {
         return sponsor;
+    }
+
+    public List<BlogEntry> getRecentBlogEntries() {
+        return mainService.getMostRecentBlogEntries(10);
     }
 }

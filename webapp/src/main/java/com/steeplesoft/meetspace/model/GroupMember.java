@@ -30,7 +30,8 @@ import org.hibernate.validator.constraints.NotEmpty;
     @NamedQuery(name = "GroupMember.findById", query = "SELECT g FROM GroupMember g WHERE g.id = :id"),
     @NamedQuery(name = "GroupMember.findByEmailAddress", query = "SELECT g FROM GroupMember g WHERE g.emailAddress = :emailAddress"),
     @NamedQuery(name = "GroupMember.findByFirstName", query = "SELECT g FROM GroupMember g WHERE g.firstName = :firstName"),
-    @NamedQuery(name = "GroupMember.findByLastName", query = "SELECT g FROM GroupMember g WHERE g.lastName = :lastName")})
+    @NamedQuery(name = "GroupMember.findByLastName", query = "SELECT g FROM GroupMember g WHERE g.lastName = :lastName")
+})
 public class GroupMember implements Serializable {
     private static final long serialVersionUID = 1L;
     

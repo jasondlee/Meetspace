@@ -16,7 +16,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -57,9 +56,10 @@ public class AttachmentBean extends ControllerBean {
             Attachment attachment = (Attachment) getSelected();
             FileHolder item = request.getFile("contents");
 
-            attachment.setFilename(item.getFileName());
+            attachment.setFileName(item.getFileName());
             attachment.setMimeType(item.getMimeType());
             attachment.setPath(uploadPath + item.getFileName());
+            attachment.setContent(getFileContents(item.getFile()));
             copyFile(item.getFile(), uploadPath, item.getFileName());
 //            attachment.setContent(getFileContents(item.getFile()));
 

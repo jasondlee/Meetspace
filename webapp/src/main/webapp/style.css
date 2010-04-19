@@ -29,3 +29,40 @@ td {
 .nowrap {
     white-space: nowrap;
 }
+
+.blogEntry {
+
+}
+
+.entryTitle {
+    border-bottom: solid 2px;
+    font-size: large;
+    font-weight: bold;
+}
+
+.entryBody {
+
+}
+
+.entryFooter {
+    border-top: dashed 1px;
+    font-size: smaller;
+    font-style: italic;
+    background-color: #ececec;
+}
+
+.ul {
+    margin: 1.12em 0;
+}
+
+ol, ul, dir, menu, dd {
+    margin-left: 40px
+}
+
+ol {
+    list-style-type: decimal
+}
+
+li {
+    display: list-item
+}

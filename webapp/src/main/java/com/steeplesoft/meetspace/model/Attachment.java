@@ -5,16 +5,7 @@
 package com.steeplesoft.meetspace.model;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
+import javax.persistence.*;
 
 /**
  *
@@ -37,10 +28,14 @@ public class Attachment implements Serializable {
     private String description;
 
     @Column(nullable = false)
-    private String filename;
+    private String fileName;
 
     @Column(nullable = false)
     private String mimeType;
+
+    @Lob
+    @Column
+    private byte[] content;
 
     @Column(nullable = false)
     private String path;
@@ -72,12 +67,12 @@ public class Attachment implements Serializable {
         this.title = title;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getMimeType() {
@@ -102,5 +97,13 @@ public class Attachment implements Serializable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }

@@ -54,6 +54,22 @@
             </tr>
         </table>
         <h3 style="width: 100%; border-bottom: 1px; border-bottom-style: solid;">Blogs</h3>
+        <ui:repeat id="blogsTable" value="#{main.recentBlogEntries}" var="entry" varStatus="status">
+            <div id="blogEntry_#{status.index}" class="blogEntry">
+                <div id="entryTitle" class="entryTitle">
+                    #{entry.title}
+                </div>
+                <div id="entryBody" class="entryBody">
+                    <h:outputText value="#{entry.body}" escape="false"/>
+                </div>
+                <div id="entryFooter" class="entryFooter">
+                    Posted by #{entry.postedBy.firstName} #{entry.postedBy.lastName} on
+                    <h:outputText value="#{entry.postedDate}">
+                        <f:convertDateTime dateStyle="long" />
+                    </h:outputText>
+                </div>
+            </div>
+        </ui:repeat>
     </ui:define>
 </ui:composition>
 </body>
